@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2019.1.1"
+    id "cpp"
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -12,17 +13,17 @@ deploy {
         roboRIO("roborio") {
             team = frc.getTeamNumber()
         }
-        // target('rPiVision') {
-        //     directory = '/home/pi'
-        //     failOnMissing = false
-        //     locations {
-        //         ssh {
-        //             address = 'chilivision.local'
-        //             user = 'pi'
-        //             password = 'raspberry'
-        //         }
-        //     }
-        // }
+        target('rPiVision') {
+            directory = '/home/pi'
+            failOnMissing = false
+            locations {
+                ssh {
+                    address = 'chilivision.local'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+            }
+        }
     }
     artifacts {
         frcJavaArtifact('frcJava') {
@@ -38,26 +39,22 @@ deploy {
             targets << "roborio"
             directory = '/home/lvuser/deploy'
         }
-        // // Artifact to deploy vision files to rPi
-        // fileTreeArtifact('rPiCodeDeploy') {
-        //     files = fileTree(dir: 'vision')
-        //     targets << "rPiVision"
-        //     directory = '/home/pi/code'
-        // }
+        // Artifact to deploy vision files to rPi
+        fileTreeArtifact('rPiCodeDeploy') {
+            files = fileTree(dir: 'vision')
+            targets << "rPiVision"
+            directory = '/home/pi/code'
+        }
     }
 }
 
-// model {
-//     components {
-//         chiliVision(NativeExecutableSpec) {
-
-//             targetPlatform wpi.platforms.raspbian
-
-
-//             useLibrary(it)
-//         }
-//     }
-// }
+model {
+    components {
+        chiliVision(NativeExecutableSpec) {
+            useLibrary(it)
+        }
+    }
+}
 
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
