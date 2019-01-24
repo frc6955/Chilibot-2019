@@ -5,10 +5,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.VictorSP;
 
 public class Cargosystem  {
 
@@ -25,7 +22,6 @@ public class Cargosystem  {
 
         public void LiftArm(){
             RightMotor.set(ControlMode.PercentOutput,0.8);
-
         }
         public void DropArm(){
             RightMotor.set(ControlMode.PercentOutput,-0.8);

@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -10,6 +11,8 @@ public class Robot extends TimedRobot {
   Compressor compresor;
   DifferentialDrive chassis;
   Joystick Joy;
+  Spark left;
+  Spark right;
   CameraServer cam;
   HPsystem hatchPanelIntake;
   Cargosystem CargoSystem;
@@ -20,6 +23,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     cam.getInstance().startAutomaticCapture();
     Joy = new Joystick(0);
+    compresor = new Compressor();
+    left = new Spark(0);
+    right= new Spark (1);
+    chassis = new DifferentialDrive(left, right);
     compresor.setClosedLoopControl(true);
     hatchPanelIntake = new HPsystem(Constantes.kSolenoideHPIntakeIn,Constantes.kSolenoideHPIntakeOut,Constantes.kSolenoideHPReelIn,Constantes.kSolenoideHPReelOut);
     CargoSystem = new Cargosystem(Constantes.kMotorIntake,Constantes.kTalonSRX,Constantes.kVictorSPX);
