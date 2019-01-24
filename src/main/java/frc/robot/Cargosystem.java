@@ -1,6 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -10,21 +10,33 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.VictorSP;
 
-public class Cargosystem extends TimedRobot {
+public class Cargosystem  {
 
     Spark intake;
-    TalonSRX  der;
-    VictorSPX izq;
+    TalonSRX  RightMotor;
+    VictorSPX LeftMotor;
 
-    @Override
-    public void robotInit() {
-    intake = new Spark(2);
-    der = new TalonSRX(22);
-    izq = new VictorSPX(21);
-    izq.set(ControlMode.Follower,22);
+    public Cargosystem(int c1,int c2, int c3) {
+        intake = new Spark(c1);
+        RightMotor = new TalonSRX(c2);
+        LeftMotor = new VictorSPX(c3);
+        LeftMotor.set(ControlMode.Follower,c2);
     }
 
-    public void liftArm(){
-        der.set(0.8);
-    }
+        public void LiftArm(){
+            RightMotor.set(ControlMode.PercentOutput,0.8);
+
+        }
+        public void DropArm(){
+            RightMotor.set(ControlMode.PercentOutput,-0.8);
+        }
+        public void RollerOut(){
+            intake.set(0.8);
+        }
+        public void RollerIn(){
+            intake.set(-0.8);
+        }
+        public void RollerStop(){
+            intake.set(0);
+        }
 }
