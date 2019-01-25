@@ -1,39 +1,41 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 import random
-import time
 import threading
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'frc6955!'
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode=None)
 
 threadsim = None
+thread_lock = threading.Lock()
 num_clients = 0
+refresh_period = 0.1
 
 def simular_evento():
-    with app.app_context():
-        while True:
-            numero = random.randint(0, 500)
-            print(numero)
-            emit("receive_data", {"data": numero})
-            time.sleep(0.020)
+    while True:
+        numero = random.randint(0, 12)
+        # Normal blocking functions can't be used in an async SocketIO app
+        # For future reference, view the Flask-SocketIO example application:
+        # https://github.com/miguelgrinberg/Flask-SocketIO/blob/master/example/app.py
+        socketio.emit("receive_data", {"data": numero}, namespace='/webui')
+        socketio.sleep(refresh_period)
 
 @app.route('/')
 def index():
     return render_template('index.html')
     
-@socketio.on('connect_event', namespace='/webui')
-def connect_event(payload):
+@socketio.on('connect', namespace='/webui')
+def connect_event():
     global num_clients, threadsim
-    if threadsim is None:
-        threadsim = threading.Thread(target=simular_evento)
-        threadsim.start()
+    with thread_lock:
+        if threadsim is None:
+            threadsim = socketio.start_background_task(simular_evento)
     num_clients += 1
     print("Conexiones hasta el momento:", num_clients)
-    emit('client_connected', {
+    emit('connection_confirmed', {
         'client_id': num_clients
-    })
+    }, namespace='/webui')
 
 if __name__ == '__main__':
     print('hola')
