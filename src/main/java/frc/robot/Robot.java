@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
  
 public class Robot extends TimedRobot {
@@ -13,7 +14,7 @@ public class Robot extends TimedRobot {
   Joystick Joy;
   Spark left;
   Spark right;
-  CameraServer cam;
+  UsbCamera cam;
   HPsystem hatchPanelIntake;
   Cargosystem CargoSystem;
 
@@ -21,13 +22,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    cam.getInstance().startAutomaticCapture();
-    Joy = new Joystick(0);
+    cam = CameraServer.getInstance().startAutomaticCapture();
+    cam.setFPS(Constantes.kFPS);
+    cam.setResolution(Constantes.kWidth, Constantes.kHeight);
+    
     compresor = new Compressor();
+    compresor.setClosedLoopControl(true);
+
+    Joy = new Joystick(0);
     left = new Spark(0);
     right= new Spark (1);
+
     chassis = new DifferentialDrive(left, right);
-    compresor.setClosedLoopControl(true);
     hatchPanelIntake = new HPsystem(Constantes.kSolenoideHPIntakeIn,Constantes.kSolenoideHPIntakeOut,Constantes.kSolenoideHPReelIn,Constantes.kSolenoideHPReelOut);
     CargoSystem = new Cargosystem(Constantes.kMotorIntake,Constantes.kTalonSRX,Constantes.kVictorSPX);
 
@@ -48,37 +54,38 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-     chassis.arcadeDrive(Joy.getRawAxis(Constantes.KAxisY_L),Joy.getRawAxis(Constantes.KAxisX_R));
-      if(Joy.getRawButton(Constantes.kButtonA)){
-        CargoSystem.RollerIn();
 
-    }
-      else if(Joy.getRawButton(Constantes.kButtonB)){
-        CargoSystem.RollerOut();  
+    chassis.arcadeDrive(Joy.getRawAxis(Constantes.KAxisY_L),Joy.getRawAxis(Constantes.KAxisX_R));
     
-      }
-      else{
-       CargoSystem.RollerStop();
+    //Control Cargo Intake
+    if(Joy.getRawButton(Constantes.kButtonA)){
+      CargoSystem.RollerIn();
+    }
+    else if(Joy.getRawButton(Constantes.kButtonB)){
+      CargoSystem.RollerOut();  
+    }
+    else{
+      CargoSystem.RollerStop();
+    }
 
-      }
+    //Control Riel
     if(Joy.getRawButton(Constantes.kButtonX)){
       hatchPanelIntake.releaseReel();
-  
     }
       else if(Joy.getRawButton(Constantes.kButtonY)){
         hatchPanelIntake.contractReel();
-
-      }
+    }
+    
+    //Control HP Intake
     if(Joy.getRawButton(Constantes.kButtonLB)){
       hatchPanelIntake.openThingy();
-  
     }
-      else if(Joy.getRawButton(Constantes.kButtonRB)){
+    else if(Joy.getRawButton(Constantes.kButtonRB)){
         hatchPanelIntake.closeThingy();
-    
-      }
+    }
 
   }
+
   @Override
   public void testPeriodic() {
   }

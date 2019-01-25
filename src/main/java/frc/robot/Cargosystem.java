@@ -20,19 +20,19 @@ public class Cargosystem  {
         LeftMotor.set(ControlMode.Follower,c2);
     }
 
-        public void LiftArm(){
-            RightMotor.set(ControlMode.PercentOutput,0.8);
-        }
-        public void DropArm(){
-            RightMotor.set(ControlMode.PercentOutput,-0.8);
-        }
-        public void RollerOut(){
-            intake.set(0.8);
-        }
-        public void RollerIn(){
-            intake.set(-0.8);
-        }
-        public void RollerStop(){
-            intake.set(0);
-        }
+    public void LiftArm(){
+        RightMotor.set(ControlMode.PercentOutput,0.8);
+    }
+    public void DropArm(){
+        RightMotor.set(ControlMode.PercentOutput,-0.8);
+    }
+    public void RollerOut(){
+        intake.set(0.8);
+    }
+    public void RollerIn(){
+        intake.set(-0.8);
+    }
+    public void RollerStop(){
+        intake.set(0);
+    }
 }
