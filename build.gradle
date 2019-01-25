@@ -12,6 +12,7 @@ deploy {
     targets {
         roboRIO("roborio") {
             team = frc.getTeamNumber()
+            failOnMissing = false
         }
         target('rPiVision') {
             directory = '/home/pi'
@@ -44,6 +45,14 @@ deploy {
             files = fileTree(dir: 'vision')
             targets << "rPiVision"
             directory = '/home/pi/code'
+
+            predeploy << {
+                execute('sudo mount -o remount,rw /')
+            }
+
+            postdeploy << {
+                execute('sudo mount -o remount,ro /')
+            }
         }
     }
 }
