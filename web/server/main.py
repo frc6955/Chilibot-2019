@@ -21,4 +21,5 @@ def connect_event(payload):
 
 
 if __name__ == '__main__':
+    print('hola')
     socketio.run(app, debug=True)
