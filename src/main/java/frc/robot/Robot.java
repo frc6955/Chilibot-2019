@@ -22,26 +22,31 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    //Camara y parametros
     cam = CameraServer.getInstance().startAutomaticCapture();
     cam.setFPS(Constantes.kFPS);
     cam.setResolution(Constantes.kWidth, Constantes.kHeight);
     
+    //Compresor
     compresor = new Compressor();
     compresor.setClosedLoopControl(true);
 
+    //Elementos
     Joy = new Joystick(0);
     left = new Spark(0);
     right= new Spark (1);
 
+    //Sistemas
     chassis = new DifferentialDrive(left, right);
     hatchPanelIntake = new HPsystem(Constantes.kSolenoideHPIntakeIn,Constantes.kSolenoideHPIntakeOut,Constantes.kSolenoideHPReelIn,Constantes.kSolenoideHPReelOut);
     CargoSystem = new Cargosystem(Constantes.kMotorIntake,Constantes.kTalonSRX,Constantes.kVictorSPX);
 
   }
 
-@Override
- public void robotPeriodic() {
+  @Override
+  public void robotPeriodic() {
   }
+
   @Override
   public void autonomousInit() {
 
