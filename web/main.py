@@ -10,7 +10,7 @@ socketio = SocketIO(app, async_mode=None)
 threadsim = None
 thread_lock = threading.Lock()
 num_clients = 0
-refresh_period = 0.1
+refresh_period = 0.02
 
 def simular_evento():
     while True:
