@@ -20,8 +20,8 @@ public class Constantes {
     public static final int KAxisY_L = 1;
     public static final int KAxisX_R = 4;
     //CAN
-    public static final int kVictorSPX = 21;
-    public static final int kTalonSRX = 22;
+    public static final int kVictor = 4;
+    
     //Camara
     public static final int kFPS = 15;
     public static final int kWidth = 320;

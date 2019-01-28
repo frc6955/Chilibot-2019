@@ -2,37 +2,29 @@ package frc.robot;
 
 
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.Spark;
 
 public class Cargosystem  {
 
-    Spark intake;
-    TalonSRX  RightMotor;
-    VictorSPX LeftMotor;
+    Spark RightMotor;
+    Victor LeftMotor;
 
-    public Cargosystem(int c1,int c2, int c3) {
-        intake = new Spark(c1);
-        RightMotor = new TalonSRX(c2);
-        LeftMotor = new VictorSPX(c3);
-        LeftMotor.set(ControlMode.Follower,c2);
-    }
-
-    public void LiftArm(){
-        RightMotor.set(ControlMode.PercentOutput,0.8);
-    }
-    public void DropArm(){
-        RightMotor.set(ControlMode.PercentOutput,-0.8);
-    }
-    public void RollerOut(){
-        intake.set(0.8);
+    public Cargosystem(int c1,int c2) {
+        RightMotor = new Spark(c1);
+        LeftMotor = new Victor(c2);
     }
     public void RollerIn(){
-        intake.set(-0.8);
+        RightMotor.set(-0.4);
+        LeftMotor.set(-0.4);
+    }
+    public void RollerOut(){
+        RightMotor.set(0.4);
+        LeftMotor.set(0.4);
     }
     public void RollerStop(){
-        intake.set(0);
+        RightMotor.set(0);
+        LeftMotor.set(0);
     }
 }

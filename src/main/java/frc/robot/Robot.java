@@ -11,7 +11,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 public class Robot extends TimedRobot {
   Compressor compresor;
   DifferentialDrive chassis;
-  Joystick Joy;
+  RobotIO Joy;
   Spark left;
   Spark right;
   UsbCamera cam;
@@ -23,6 +23,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //Camara y parametros
+
     cam = CameraServer.getInstance().startAutomaticCapture();
     cam.setFPS(Constantes.kFPS);
     cam.setResolution(Constantes.kWidth, Constantes.kHeight);
@@ -32,14 +33,14 @@ public class Robot extends TimedRobot {
     compresor.setClosedLoopControl(true);
 
     //Elementos
-    Joy = new Joystick(0);
+    Joy = new RobotIO(0);
     left = new Spark(0);
     right= new Spark (1);
 
     //Sistemas
     chassis = new DifferentialDrive(left, right);
     hatchPanelIntake = new HPsystem(Constantes.kSolenoideHPIntakeIn,Constantes.kSolenoideHPIntakeOut,Constantes.kSolenoideHPReelIn,Constantes.kSolenoideHPReelOut);
-    CargoSystem = new Cargosystem(Constantes.kMotorIntake,Constantes.kTalonSRX,Constantes.kVictorSPX);
+    CargoSystem = new Cargosystem(3,Constantes.kVictor);
 
   }
 
@@ -59,33 +60,34 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+   
 
-    chassis.arcadeDrive(Joy.getRawAxis(Constantes.KAxisY_L),Joy.getRawAxis(Constantes.KAxisX_R));
+    chassis.arcadeDrive(Joy.Ejes(Constantes.KAxisY_L),Joy.Ejes(Constantes.KAxisX_R));
     
     //Control Cargo Intake
-    if(Joy.getRawButton(Constantes.kButtonA)){
-      CargoSystem.RollerIn();
+    if(Joy.Boton(Constantes.kButtonB)){
+      CargoSystem.RollerOut();
     }
-    else if(Joy.getRawButton(Constantes.kButtonB)){
-      CargoSystem.RollerOut();  
+    else if(Joy.Boton(Constantes.kButtonA)){
+      CargoSystem.RollerIn();  
     }
     else{
       CargoSystem.RollerStop();
     }
 
     //Control Riel
-    if(Joy.getRawButton(Constantes.kButtonX)){
+    if(Joy.Boton(Constantes.kButtonX)){
       hatchPanelIntake.releaseReel();
     }
-      else if(Joy.getRawButton(Constantes.kButtonY)){
+      else if(Joy.Boton(Constantes.kButtonY)){
         hatchPanelIntake.contractReel();
     }
     
     //Control HP Intake
-    if(Joy.getRawButton(Constantes.kButtonLB)){
+    if(Joy.Boton(Constantes.kButtonLB)){
       hatchPanelIntake.openThingy();
     }
-    else if(Joy.getRawButton(Constantes.kButtonRB)){
+    else if(Joy.Boton(Constantes.kButtonRB)){
         hatchPanelIntake.closeThingy();
     }
 

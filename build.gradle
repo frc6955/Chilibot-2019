@@ -18,7 +18,7 @@ deploy {
             failOnMissing = false
             locations {
                 ssh {
-                    address = 'chilivision.local'
+                    address = 'chilivision2.local'
                     user = 'pi'
                     password = 'raspberry'
                 }
