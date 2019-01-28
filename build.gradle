@@ -25,6 +25,18 @@ deploy {
                 }
             }
         }
+
+        target('WebUI') {
+            directory = '/home/pi'
+            failOnMissing = false
+            locations {
+                ssh {
+                    address = 'chilivision.local'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+            }
+        }
     }
     artifacts {
         frcJavaArtifact('frcJava') {
@@ -45,6 +57,21 @@ deploy {
             files = fileTree(dir: 'vision')
             targets << "rPiVision"
             directory = '/home/pi/code'
+
+            predeploy << {
+                execute('sudo mount -o remount,rw /')
+            }
+
+            postdeploy << {
+                execute('sudo mount -o remount,ro /')
+            }
+        }
+
+        // Artifact to deploy WebUI files to rPi
+        fileTreeArtifact('WebUICodeDeploy') {
+            files = fileTree(dir: 'web')
+            targets << 'WebUI'
+            directory = '/home/pi/webui'
 
             predeploy << {
                 execute('sudo mount -o remount,rw /')
