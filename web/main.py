@@ -39,4 +39,4 @@ def connect_event():
 
 if __name__ == '__main__':
     print('hola')
-    socketio.run(app, debug=True)
+    socketio.run(app, host='0.0.0.0', debug=True)
