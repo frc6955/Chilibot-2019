@@ -11,7 +11,7 @@
     <script type="text/javascript" src="../static/scripts/socket.io.js"></script>
     <script type='text/javascript' src='../static/scripts/bootstrap.bundle.js'></script>
     <script type="text/javascript" src="../static/scripts/d3.js"></script>
-    <script src="../static/scripts/plotly.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/scripts/plotly.js" charset="utf-8"></script>
     <title>ChiliUI</title>
 </head>
 <body>
@@ -27,66 +27,11 @@
             <div class="col-sm-4">
                 <h3>Column 2</h3>
                 <div id="log"></div>
-                <div>
-                    <canvas id="battery" width="280" height="150"></canvas> 
-                </div>
-                 
+                <canvas id="battery-animation" width="300" height="150"></canvas>  
             </div>
         </div>
     </div>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
-            // INICIALIZACION canvas
-            var canvasBateria = document.getElementById("battery");
-            var canvasB = canvasBateria.getContext("2d");
-
-            // Connect to websockets server
-            namespace = '/webui';
-            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
-            // Create initial empty array and place plot in div #graph
-            var arrayLength = 30
-            var newArray = []
-            for (var i = 0; i < arrayLength; i++) {
-                newArray[i] = 0;
-            }
-            Plotly.plot('graph', [{
-                y: newArray,
-                mode: 'lines',
-                line: {color: '#80CAF6'}
-            }]);
-            // FIN INIT
-
-            // LISTENERS
-            // Connect listener
-            socket.on('connect', function() {
-                //socket.emit('connect_event', {});
-            })
-            // Connection confirmation listener
-            socket.on('connection_confirmed', function(msg) {
-                $('#log').append('<p>Num conexion: ' + msg['client_id'] + '</p>');
-            });
-            // Incoming data packet listener
-            socket.on("receive_data", function (msg){
-                // Receive new data point
-                var number = msg["data"];
-                canvasB.clearRect(0,0,280,150);
-                canvasB.fillStyle = "#000000";
-                canvasB.fillRect(0,0,280,150);
-                canvasB.fillStyle = "#40FF00";
-                canvasB.fillRect(10,10,260*number/13,130);
-                 // Add to data array, drop oldest sample and package array
-                newArray = newArray.concat(number);
-                newArray.splice(0, 1);
-                var data_update = {
-                    y: [newArray]
-                };
-                // Update plot with shifted and update data trace
-                Plotly.update('graph', data_update)
-            });
-            // FIN LISTENERS
-         
-           
-        });
-    </script>
+    <!-- Custom JS script import -->
+    <script type="text/javascript" src="../static/scripts/chiliwebui.js" charset="utf-8"></script>
 </body>
 </html>
