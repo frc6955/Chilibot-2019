@@ -12,7 +12,7 @@ deploy {
     targets {
         roboRIO("roborio") {
             team = frc.getTeamNumber()
-            failOnMissing = false
+            // failOnMissing = false
         }
         target('rPiVision') {
             directory = '/home/pi'
@@ -31,6 +31,11 @@ deploy {
             locations {
                 ssh {
                     address = 'chilivision.local'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+                ssh {
+                    address = '10.69.55.20'
                     user = 'pi'
                     password = 'raspberry'
                 }
@@ -56,11 +61,9 @@ deploy {
             files = fileTree(dir: 'vision')
             targets << "rPiVision"
             directory = '/home/pi/code'
-
             predeploy << {
                 execute('sudo mount -o remount,rw /')
             }
-
             postdeploy << {
                 execute('sudo mount -o remount,ro /')
             }
@@ -97,20 +100,21 @@ def includeDesktopSupport = false
 // Maven central needed for JUnit
 repositories {
     mavenCentral()
-    maven { 
-        url 'https://repo.eclipse.org/content/repositories/paho-releases/' 
-    }
+    // maven { 
+    //     url 'https://repo.eclipse.org/content/repositories/paho-releases/' 
+    // }
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
+    // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
+    // compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.0'
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     testCompile 'junit:junit:4.12'
-    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -118,5 +122,7 @@ dependencies {
 // knows where to look for our Robot Class.
 jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    // Necessary to allow use of MQTT library
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }

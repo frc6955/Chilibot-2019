@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -18,9 +17,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     CameraServer.getInstance().startAutomaticCapture();
     try {
-      client = new MqttClient("tcp://chilivision.local:1883", MqttClient.generateClientId());
+      client = new MqttClient("tcp://10.69.55.20:1883", MqttClient.generateClientId());
       client.connect();
-      // client.subscribe("webui/battery");
+      // client.subscribe("battery");
     } catch (MqttException e) {
       e.printStackTrace();
     }
@@ -48,12 +47,8 @@ public class Robot extends TimedRobot {
     String svoltage = Double.toString(voltage);
     message.setPayload(svoltage.getBytes());
     try {
-      client.publish("webui/battery/voltage", message);
-    } catch (MqttPersistenceException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      client.publish("battery", message);
     } catch (MqttException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
 	  }
 
