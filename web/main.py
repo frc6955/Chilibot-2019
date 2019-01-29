@@ -1,10 +1,22 @@
+import eventlet
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
+from flask_mqtt import Mqtt 
 import random
 import threading
 
+eventlet.monkey_patch()
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'frc6955!'
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['MQTT_BROKER_URL'] = 'chilivision.local'
+app.config['MQTT_BROKER_PORT'] = 1883
+app.config['MQTT_USERNAME'] = ''
+app.config['MQTT_PASSWORD'] = ''
+app.config['MQTT_KEEPALIVE'] = 5
+app.config['MQTT_TS_ENABLE'] = False
+mqtt = Mqtt(app)
 socketio = SocketIO(app, async_mode=None)
 
 threadsim = None
@@ -18,7 +30,7 @@ def simular_evento():
         # Normal blocking functions can't be used in an async SocketIO app
         # For future reference, view the Flask-SocketIO example application:
         # https://github.com/miguelgrinberg/Flask-SocketIO/blob/master/example/app.py
-        socketio.emit("receive_data", {"data": numero}, namespace='/webui')
+        # socketio.emit("receive_data", {"data": numero}, namespace='/webui')
         socketio.sleep(refresh_period)
 
 @app.route('/')
@@ -31,11 +43,18 @@ def connect_event():
     with thread_lock:
         if threadsim is None:
             threadsim = socketio.start_background_task(simular_evento)
+    mqtt.subscribe('battery', qos=0)
     num_clients += 1
     print("Conexiones hasta el momento:", num_clients)
     emit('connection_confirmed', {
         'client_id': num_clients
     }, namespace='/webui')
+
+@mqtt.on_message()
+def handle_mqtt_messages(client, userdata, message):
+    if message.topic == 'battery':
+        socketio.emit('receive_data', {'data': message.payload.decode()}, namespace='/webui')
+        
 
 if __name__ == '__main__':
     print('hola')
