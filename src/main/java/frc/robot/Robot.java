@@ -11,7 +11,8 @@ public class Robot extends TimedRobot {
   UsbCamera cam;
   Compressor compresor;
 
-  RobotIO joy;
+  RobotIO Driver;
+  RobotIO Operador;
   Chasis chassis;
   Cargosystem cargoSystem;
   HPsystem hatchPanelIntake;
@@ -29,7 +30,9 @@ public class Robot extends TimedRobot {
     compresor.setClosedLoopControl(true);
 
     //Inputs
-    joy = new RobotIO(0);
+    Driver = new RobotIO(0);
+    Operador = new RobotIO(1);
+
 
     //Sistemas
     chassis = new Chasis(Constantes.kChassisLeft, Constantes.kChassisRight);
@@ -57,13 +60,13 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
    
     //Chassis
-    chassis.driveMode(joy.Ejes(Constantes.KAxisY_L),joy.Ejes(Constantes.KAxisX_R));
+    chassis.driveMode(Driver.Ejes(Constantes.KAxisY_L),Driver.Ejes(Constantes.KAxisX_R));
     
     //Control Cargo Intake
-    if(joy.Boton(Constantes.kButtonB)){
+    if(Driver.Boton(Constantes.kButtonA)){
       cargoSystem.RollerOut();
     }
-    else if(joy.Boton(Constantes.kButtonA)){
+    else if(Driver.Boton(Constantes.kButtonB)){
       cargoSystem.RollerIn();  
     }
     else{
@@ -71,18 +74,18 @@ public class Robot extends TimedRobot {
     }
 
     //Control Riel
-    if(joy.Boton(Constantes.kButtonX)){
+    if(Operador.Boton(Constantes.kButtonA)){
       hatchPanelIntake.releaseReel();
     }
-    else if(joy.Boton(Constantes.kButtonY)){
+    else if(Operador.Boton(Constantes.kButtonB)){
       hatchPanelIntake.contractReel();
     }
     
     //Control HP Intake
-    if(joy.Boton(Constantes.kButtonLB)){
+    if(Operador.Boton(Constantes.kButtonLB)){
       hatchPanelIntake.openThingy();
     }
-    else if(joy.Boton(Constantes.kButtonRB)){
+    else if(Operador.Boton(Constantes.kButtonRB)){
       hatchPanelIntake.closeThingy();
     }
 
