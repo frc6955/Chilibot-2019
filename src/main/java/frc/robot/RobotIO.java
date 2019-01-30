@@ -7,7 +7,15 @@ import edu.wpi.first.wpilibj.Joystick;
 
  
 public class RobotIO {
- 
+    private static RobotIO instance;
+    
+    public static RobotIO getInstance() {
+        if (instance == null) {
+            instance = new RobotIO(0);
+        }
+        return instance;
+    }
+
 Joystick Joy;
 
 

@@ -12,10 +12,10 @@ public class Robot extends TimedRobot {
   UsbCamera cam;
   Compressor compresor;
   Cargosystem Cargo;
-  RobotIO Driver;
-  RobotIO Operador;
+  RobotIO Joystick;
   Chasis chassis;
   HPsystem hatchPanelIntake;
+  Output output;
 
 
   @Override
@@ -31,15 +31,13 @@ public class Robot extends TimedRobot {
     compresor.setClosedLoopControl(true);
 
     //Inputs
-    Driver = new RobotIO(0);
-    Operador = new RobotIO(1);
-
+    Joystick = RobotIO.getInstance();
 
     //Sistemas
     chassis = Chasis.getInstance();
     Cargo = Cargosystem.getInstance();
     hatchPanelIntake = HPsystem.getInstance();
-    
+    output = Output.getInstance();
   }
 
   @Override
@@ -60,34 +58,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
    
     //Chassis
-    chassis.driveMode(Driver.Ejes(Constantes.KAxisY_L),Driver.Ejes(Constantes.KAxisX_R));
-    
-    //Control Cargo Intake
-    if(Driver.Boton(Constantes.kButtonA)){
-      Cargo.RollerOut();
-    }
-    else if(Driver.Boton(Constantes.kButtonB)){
-      Cargo.RollerIn();
-    }
-    else{
-      Cargo.RollerStop();
-    }
+    chassis.driveMode(Joystick.Ejes(Constantes.KAxisY_L),Joystick.Ejes(Constantes.KAxisX_R));
+    output.update(Joystick, Cargo, hatchPanelIntake,chassis);
 
-    //Control Riel
-    if(Operador.Boton(Constantes.kButtonA)){
-      hatchPanelIntake.releaseReel();
-    }
-    else if(Operador.Boton(Constantes.kButtonB)){
-      hatchPanelIntake.contractReel();
-    }
-    
-    //Control HP Intake
-    if(Operador.Boton(Constantes.kButtonLB)){
-      hatchPanelIntake.openThingy();
-    }
-    else if(Operador.Boton(Constantes.kButtonRB)){
-      hatchPanelIntake.closeThingy();
-    }
 
   }
 

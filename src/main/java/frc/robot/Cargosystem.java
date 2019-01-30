@@ -1,7 +1,5 @@
 package frc.robot;
 
-
-
 //import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.Spark;
