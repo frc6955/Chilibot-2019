@@ -5,17 +5,18 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.cameraserver.CameraServer;
+
  
 public class Robot extends TimedRobot {
 
   UsbCamera cam;
   Compressor compresor;
-
+  Cargosystem Cargo;
   RobotIO Driver;
   RobotIO Operador;
   Chasis chassis;
-  Cargosystem cargoSystem;
   HPsystem hatchPanelIntake;
+
 
   @Override
   public void robotInit() {
@@ -35,10 +36,9 @@ public class Robot extends TimedRobot {
 
 
     //Sistemas
-    chassis = new Chasis(Constantes.kChassisLeft, Constantes.kChassisRight);
-
-    cargoSystem = new Cargosystem(3,Constantes.kVictor);
-    hatchPanelIntake = new HPsystem(Constantes.kSolenoideHPIntakeIn,Constantes.kSolenoideHPIntakeOut,Constantes.kSolenoideHPReelIn,Constantes.kSolenoideHPReelOut);
+    chassis = Chasis.getInstance();
+    Cargo = Cargosystem.getInstance();
+    hatchPanelIntake = HPsystem.getInstance();
     
   }
 
@@ -64,13 +64,13 @@ public class Robot extends TimedRobot {
     
     //Control Cargo Intake
     if(Driver.Boton(Constantes.kButtonA)){
-      cargoSystem.RollerOut();
+      Cargo.RollerOut();
     }
     else if(Driver.Boton(Constantes.kButtonB)){
-      cargoSystem.RollerIn();  
+      Cargo.RollerIn();
     }
     else{
-      cargoSystem.RollerStop();
+      Cargo.RollerStop();
     }
 
     //Control Riel

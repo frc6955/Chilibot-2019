@@ -4,6 +4,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class HPsystem {
+    private static HPsystem instance;
+    
+    public static HPsystem getInstance() {
+        if (instance == null) {
+            instance = new HPsystem(Constantes.kSolenoideHPIntakeIn,Constantes.kSolenoideHPIntakeOut,Constantes.kSolenoideHPReelIn,Constantes.kSolenoideHPReelOut);
+        }
+        return instance;
+    }
 
     DoubleSolenoid reel;
     DoubleSolenoid intake;
@@ -26,9 +34,4 @@ public class HPsystem {
         reel.set(Value.kReverse);
     }
 }
-
-
-
-
-
 

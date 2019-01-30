@@ -10,6 +10,7 @@ public class Constantes {
     public static final int kChassisLeft = 0;
     public static final int kChassisRight = 1;
     public static final int kMotorIntake = 2;
+    public static final int kMotorCargo = 3;
     ///Joystick
     //Buttons
     public static final int kButtonA = 1;

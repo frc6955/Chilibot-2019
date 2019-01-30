@@ -3,6 +3,14 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Chasis {
+    public static Chasis instance;
+
+    public static Chasis getInstance() {
+        if (instance == null) {
+            instance = new Chasis(Constantes.kChassisLeft, Constantes.kChassisRight);
+        }
+        return instance;
+    }
     Spark leftDriver, rightDriver;
     DifferentialDrive chassis;
 
