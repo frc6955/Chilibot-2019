@@ -2,36 +2,40 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.Encoder;
-//import edu.wpi.first.wpilibj.AnalogGyro;
-//import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
- 
+
 public class RobotIO {
+ 
+    private Joystick Joy;
+    private Joystick Operator;
     private static RobotIO instance;
-    
     public static RobotIO getInstance() {
         if (instance == null) {
-            instance = new RobotIO(0);
+            instance = new RobotIO(0, 1);
         }
         return instance;
     }
 
-Joystick Joy;
+    private RobotIO (int puertojoystick, int port) {
+        Joy = new Joystick(puertojoystick);
+        Operator = new Joystick(port);
+    }
 
+    public boolean Boton(int button, int joystick){
+        if (joystick==0){
+          return Joy.getRawButton(button);  
+        }else {
+          return Operator.getRawButton(button);
+        }
+    }
 
-public RobotIO (int puertojoystick) {
-Joy = new Joystick(puertojoystick);
-}
-
-public boolean Boton(int button){
- return Joy.getRawButton(button);
-}
-
-public double Ejes(int axis){
- return Joy.getRawAxis(axis);
-}
-
-
-
+    public double Ejes(int axis, int joystick){
+        
+        if (joystick==0){
+            return Joy.getRawAxis(axis);
+          }else {
+            return Operator.getRawAxis(axis);
+          }
+    }
 
 }

@@ -1,9 +1,11 @@
-package frc.robot;
+package frc.robot.subsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import frc.robot.Constantes;
+import frc.robot.RobotIO;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class HPsystem {
+public class HPsystem implements Subsystem {
     private static HPsystem instance;
     
     public static HPsystem getInstance() {
@@ -16,7 +18,7 @@ public class HPsystem {
     DoubleSolenoid reel;
     DoubleSolenoid intake;
 
-    public HPsystem(int p0, int p1, int p2, int p3) {
+    private HPsystem(int p0, int p1, int p2, int p3) {
         reel = new DoubleSolenoid(p0, p1);
        intake = new DoubleSolenoid(p2, p3);
     }
@@ -33,6 +35,26 @@ public class HPsystem {
     public void contractReel(){
         reel.set(Value.kReverse);
     }
+    public void update(RobotIO entradas){
+        //Control Riel
+        if(entradas.Boton(Constantes.kButtonA)){
+            this.releaseReel();
+          }
+          else if(entradas.Boton(Constantes.kButtonB)){
+            this.contractReel();
+          }
+          
+          //Control HP Intake
+          if(entradas.Boton(Constantes.kButtonLB)){
+            this.openThingy();
+          }
+          else if(entradas.Boton(Constantes.kButtonRB)){
+            this.closeThingy();
+          }
+
+    }
+    
+
 
 }
 

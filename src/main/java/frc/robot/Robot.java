@@ -1,8 +1,10 @@
 package frc.robot;
 
-
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.subsystem.Cargosystem;
+import frc.robot.subsystem.Chasis;
+import frc.robot.subsystem.HPsystem;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -12,10 +14,11 @@ public class Robot extends TimedRobot {
   UsbCamera cam;
   Compressor compresor;
   Cargosystem Cargo;
-  RobotIO Joystick;
+  RobotIO entradas;
   Chasis chassis;
   HPsystem hatchPanelIntake;
   Output output;
+  Scheduler scheduler;
 
 
   @Override
@@ -31,13 +34,17 @@ public class Robot extends TimedRobot {
     compresor.setClosedLoopControl(true);
 
     //Inputs
-    Joystick = RobotIO.getInstance();
+    entradas = RobotIO.getInstance();
 
     //Sistemas
     chassis = Chasis.getInstance();
     Cargo = Cargosystem.getInstance();
     hatchPanelIntake = HPsystem.getInstance();
-    output = Output.getInstance();
+    scheduler = Scheduler.getInstance();
+    scheduler.addSubsystem(chassis);
+    scheduler.addSubsystem(hatchPanelIntake);
+    scheduler.addSubsystem(Cargo);
+
   }
 
   @Override
@@ -56,11 +63,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-   
-    //Chassis
-    chassis.driveMode(Joystick.Ejes(Constantes.KAxisY_L),Joystick.Ejes(Constantes.KAxisX_R));
-    output.update(Joystick, Cargo, hatchPanelIntake,chassis);
-
+    scheduler.update(entradas); 
+    //chassis.update(entradas);
+    //hatchPanelIntake.update(entradas);
+    //Cargo.update(entradas);
 
   }
 
