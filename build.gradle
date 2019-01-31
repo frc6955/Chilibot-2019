@@ -86,30 +86,19 @@ deploy {
     }
 }
 
-model {
-    components {
-        chiliVision(NativeExecutableSpec) {
-            useLibrary(it)
-        }
-    }
-}
-
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
 
 // Maven central needed for JUnit
 repositories {
     mavenCentral()
-    // maven { 
-    //     url 'https://repo.eclipse.org/content/repositories/paho-releases/' 
-    // }
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
     // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
-    // compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.0'
+    compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.1.0'
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
