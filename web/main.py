@@ -41,7 +41,7 @@ def connect_event():
     with thread_lock:
         if threadsim is None:
             threadsim = socketio.start_background_task(simular_evento)
-    mqtt.subscribe('battery', qos=0)
+    mqtt.subscribe('webui/#', qos=0)
     num_clients += 1
     print("Conexiones hasta el momento:", num_clients)
     emit('connection_confirmed', {
@@ -50,9 +50,11 @@ def connect_event():
 
 @mqtt.on_message()
 def handle_mqtt_messages(client, userdata, message):
-    if message.topic == 'battery':
-        socketio.emit('receive_data', {'data': message.payload.decode()}, namespace='/webui')
-        
+    if message.topic == 'webui/battery/voltage':
+        socketio.emit('receive_data_battery', {'data': message.payload.decode()}, namespace='/webui')
+    if message.topic == 'webui/matchtime':
+        socketio.emit('receive_data_time', {'data': message.payload.decode()}, namespace='/webui')
+
 
 if __name__ == '__main__':
     print('hola')

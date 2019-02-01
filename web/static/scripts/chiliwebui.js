@@ -33,16 +33,16 @@ $(document).ready(function() {
         $('#log').append('<p>Num conexion: ' + msg['client_id'] + '</p>');
     });
     // receive_data listener: Emitted async by the server to transmit information from simulations or roboRIO
-    socket.on("receive_data", function (payload){
+    socket.on("receive_data_battery", function (payload){
         // The msg variable is the dictionary payload and contains the keys specified by the server
         var number = payload["data"];
         // Battery canvas animation: Clear canvas, draw battery shape, draw 'charge' of battery proportionally
-        canvas2DBattery.clearRect(0, 0, 280, 150);
+        canvas2DBattery.clearRect(0, 0, 275, 120);
         canvas2DBattery.fillStyle = "#000000";
-        canvas2DBattery.fillRect(0, 0, 280, 150);
-        canvas2DBattery.fillRect(280, 45, 20, 60)
+        canvas2DBattery.fillRect(0, 0, 260, 120);
+        canvas2DBattery.fillRect(260, 40, 15, 50)
         canvas2DBattery.fillStyle = "#40FF00";
-        canvas2DBattery.fillRect(10, 10, (260 / 13) * number, 130);
+        canvas2DBattery.fillRect(10, 10, (240 / 13) * number, 100);
         // To plot updated battery voltage trace, add new data point
         batteryVoltageTrace = batteryVoltageTrace.concat(number);
         // The remove first data point to "shift" forward
@@ -51,5 +51,9 @@ $(document).ready(function() {
         Plotly.update('graph', {
             y: [batteryVoltageTrace]
         });
+    });
+    socket.on('receive_data_time', function(payload){
+        var number = payload['data'];
+        console.log(number);
     });
 });

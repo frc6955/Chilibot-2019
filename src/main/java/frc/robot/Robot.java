@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 
@@ -16,6 +17,7 @@ public class Robot extends TimedRobot {
 
   MqttClient client;
   DecimalFormat d3f;
+  DriverStation dsinfo;
   
   @Override
   public void robotInit() {
@@ -25,10 +27,10 @@ public class Robot extends TimedRobot {
     try {
       client = new MqttClient("tcp://10.69.55.20:1883", "fcef399c421740af845b8153e476533a", null);
       client.connect();
-      client.subscribe("battery");
     } catch (MqttException e) {
       e.printStackTrace();
     }
+    dsinfo = DriverStation.getInstance();
   }
 
   @Override
@@ -47,12 +49,22 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+
+    MqttMessage mqttBatteryStateMessage = new MqttMessage();
+    MqttMessage mqttTimerMessage = new MqttMessage();
+
     double voltage = RobotController.getBatteryVoltage();
-    MqttMessage message = new MqttMessage();
-    String svoltage = d3f.format(voltage);
-    message.setPayload(svoltage.getBytes());
+    double remainingMatchTime = dsinfo.getMatchTime();
+
+    String strBatteryStateMessage = d3f.format(voltage);
+    String strTimerMessage = d3f.format(remainingMatchTime);
+
+    mqttBatteryStateMessage.setPayload(strBatteryStateMessage.getBytes());
+    mqttTimerMessage.setPayload(strTimerMessage.getBytes());
+
     try {
-      client.publish("battery", message);
+      client.publish("webui/battery/voltage", mqttBatteryStateMessage);
+      client.publish("webui/matchtime", mqttTimerMessage);
     } catch (MqttException e) {
       e.printStackTrace();
 	  }
