@@ -62,10 +62,10 @@ deploy {
             targets << "rPiVision"
             directory = '/home/pi/code'
             predeploy << {
-                execute('sudo mount -o remount,rw /')
+                execute('rw')
             }
             postdeploy << {
-                execute('sudo mount -o remount,ro /')
+                execute('ro')
             }
         }
 
@@ -77,9 +77,13 @@ deploy {
 
             predeploy << {
                 execute('sudo mount -o remount,rw /')
+                execute('sudo systemctl stop chiliwebui') 
             }
 
             postdeploy << {
+                execute('sudo cp $(pwd)/webui/resources/chiliwebui.service /etc/systemd/system/chiliwebui.service')
+                execute('sudo systemctl daemon-reload; sudo service chiliwebui restart; sudo service chiliwebui status')
+                execute('sudo systemctl enable chiliwebui')
                 execute('sudo mount -o remount,ro /')
             }
         }

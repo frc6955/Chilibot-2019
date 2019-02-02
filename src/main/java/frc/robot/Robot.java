@@ -21,11 +21,11 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    CameraServer.getInstance().startAutomaticCapture();
+    // CameraServer.getInstance().startAutomaticCapture();
     d3f = new DecimalFormat("#.###");
     d3f.setRoundingMode(RoundingMode.HALF_UP);
     try {
-      client = new MqttClient("tcp://10.69.55.20:1883", "fcef399c421740af845b8153e476533a", null);
+      client = new MqttClient("tcp://chilivision.local:1883", MqttClient.generateClientId(), null);
       client.connect();
     } catch (MqttException e) {
       e.printStackTrace();
