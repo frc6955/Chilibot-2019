@@ -3,6 +3,7 @@ package frc.robot.subsystem;
 import frc.robot.RobotIO;
 import frc.robot.Constantes;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.wpilibj.Spark;
@@ -36,13 +37,10 @@ public class Chasis implements Subsystem {
         camFlag = false;
         frontCam = CameraServer.getInstance().startAutomaticCapture(0);
         backCam = CameraServer.getInstance().startAutomaticCapture(1);
-        frontCam.setFPS(Constantes.kFPS);
-        backCam.setFPS(Constantes.kFPS);
-        frontCam.setResolution(Constantes.kWidth, Constantes.kHeight);
-        backCam.setResolution(Constantes.kWidth, Constantes.kHeight);
+        frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kWidth, Constantes.kHeight, Constantes.kFPS);
+        backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kWidth, Constantes.kHeight, Constantes.kFPS);
         frontCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
         backCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-
         server = CameraServer.getInstance().getServer();
 
         //Compresor
