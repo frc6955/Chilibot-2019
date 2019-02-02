@@ -1,9 +1,9 @@
 package frc.robot.subsystem;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import frc.robot.Constantes;
 import frc.robot.RobotIO;
+import frc.robot.Constantes;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class HPsystem implements Subsystem {
     private static HPsystem instance;
@@ -37,18 +37,18 @@ public class HPsystem implements Subsystem {
     }
     public void update(RobotIO entradas){
         //Control Riel
-        if(entradas.Boton(Constantes.kButtonA)){
+        if(entradas.Boton(Constantes.kButtonA, Constantes.kOperator)){
             this.releaseReel();
           }
-          else if(entradas.Boton(Constantes.kButtonB)){
+          else if(entradas.Boton(Constantes.kButtonB, Constantes.kOperator)){
             this.contractReel();
           }
           
           //Control HP Intake
-          if(entradas.Boton(Constantes.kButtonLB)){
+          if(entradas.Boton(Constantes.kButtonLB, Constantes.kOperator)){
             this.openThingy();
           }
-          else if(entradas.Boton(Constantes.kButtonRB)){
+          else if(entradas.Boton(Constantes.kButtonRB, Constantes.kOperator)){
             this.closeThingy();
           }
 

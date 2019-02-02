@@ -33,7 +33,7 @@ public class Constantes {
     ///Cargo
     public static final double kCargoIn = -0.6;
     public static final double kCargoOut = 0.8;
-    public static final int kCargoStop = 0;
+    public static final double kCargoStop = 0.0;
 
 
 }

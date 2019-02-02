@@ -22,7 +22,7 @@ public void addSubsystem(Subsystem sub){
 
 public void update(RobotIO entradas){
   for(Subsystem subsystem : listsubs ){
-            subsystem.update(entradas);
+        subsystem.update(entradas);
   }
 }
 

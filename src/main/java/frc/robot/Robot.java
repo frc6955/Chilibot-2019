@@ -40,6 +40,8 @@ public class Robot extends TimedRobot {
     chassis = Chasis.getInstance();
     Cargo = Cargosystem.getInstance();
     hatchPanelIntake = HPsystem.getInstance();
+
+    
     scheduler = Scheduler.getInstance();
     scheduler.addSubsystem(chassis);
     scheduler.addSubsystem(hatchPanelIntake);

@@ -1,10 +1,10 @@
 package frc.robot.subsystem;
 
 //import com.ctre.phoenix.motorcontrol.ControlMode;
-import edu.wpi.first.wpilibj.Victor;
-import frc.robot.Constantes;
 import frc.robot.RobotIO;
+import frc.robot.Constantes;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.Victor;
 
 public class Cargosystem implements Subsystem {
     private static Cargosystem instance;
