@@ -1,37 +1,25 @@
 package frc.robot;
 
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystem.Cargosystem;
 import frc.robot.subsystem.Chasis;
 import frc.robot.subsystem.HPsystem;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.cameraserver.CameraServer;
 
  
 public class Robot extends TimedRobot {
 
-  UsbCamera cam;
-  Compressor compresor;
-  Cargosystem Cargo;
   RobotIO entradas;
-  Chasis chassis;
-  HPsystem hatchPanelIntake;
+
   Output output;
+  Chasis chassis;
+  Cargosystem Cargo;
+  HPsystem hatchPanelIntake;
+  
   Scheduler scheduler;
 
 
   @Override
   public void robotInit() {
-
-    //Camara y parametros
-    cam = CameraServer.getInstance().startAutomaticCapture();
-    cam.setFPS(Constantes.kFPS);
-    cam.setResolution(Constantes.kWidth, Constantes.kHeight);
-    
-    //Compresor
-    compresor = new Compressor();
-    compresor.setClosedLoopControl(true);
 
     //Inputs
     entradas = RobotIO.getInstance();
