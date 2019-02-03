@@ -57,7 +57,7 @@ public class MQTTReporterManager {
         public void run() {
             while(this.liveThread) {
                 for (MQTTReportable reportable : this.reportablesVector) {
-                    Object retValue = reportable.method.get();
+                    Object retValue = reportable.getMethod().get();
                     String messageStr;
                     MqttMessage message;
                     if (retValue instanceof String) {
