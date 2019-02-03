@@ -13,24 +13,21 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
+import frc.robot.util.MQTTReporterManager;
+import frc.robot.util.MQTTReporterManager.MQTTTransmitRate;
+
 public class Robot extends TimedRobot {
 
-  MqttClient client;
-  DecimalFormat d3f;
   DriverStation dsinfo;
+  MQTTReporterManager mqttLogger;
   
   @Override
   public void robotInit() {
     // CameraServer.getInstance().startAutomaticCapture();
-    d3f = new DecimalFormat("#.###");
-    d3f.setRoundingMode(RoundingMode.HALF_UP);
-    try {
-      client = new MqttClient("tcp://chilivision.local:1883", MqttClient.generateClientId(), null);
-      client.connect();
-    } catch (MqttException e) {
-      e.printStackTrace();
-    }
     dsinfo = DriverStation.getInstance();
+    mqttLogger = MQTTReporterManager.getInstance();
+    mqttLogger.addValue(RobotController::getBatteryVoltage, "webui/battery/voltage", MQTTTransmitRate.SLOW);
+    mqttLogger.addValue(dsinfo::getMatchTime, "webui/driverstation/matchtime", MQTTTransmitRate.SLOW);
   }
 
   @Override
@@ -49,25 +46,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-
-    MqttMessage mqttBatteryStateMessage = new MqttMessage();
-    MqttMessage mqttTimerMessage = new MqttMessage();
-
-    double voltage = RobotController.getBatteryVoltage();
-    double remainingMatchTime = dsinfo.getMatchTime();
-
-    String strBatteryStateMessage = d3f.format(voltage);
-    String strTimerMessage = d3f.format(remainingMatchTime);
-
-    mqttBatteryStateMessage.setPayload(strBatteryStateMessage.getBytes());
-    mqttTimerMessage.setPayload(strTimerMessage.getBytes());
-
-    try {
-      client.publish("webui/battery/voltage", mqttBatteryStateMessage);
-      client.publish("webui/matchtime", mqttTimerMessage);
-    } catch (MqttException e) {
-      e.printStackTrace();
-	  }
 
   }
 

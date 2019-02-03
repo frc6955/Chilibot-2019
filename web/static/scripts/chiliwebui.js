@@ -54,6 +54,6 @@ $(document).ready(function() {
     });
     socket.on('receive_data_time', function(payload){
         var number = payload['data'];
-        console.log(number);
+        $('#timer').html('<p>Tiempo restante: ' + number+ '</p>');
     });
 });

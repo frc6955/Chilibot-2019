@@ -52,7 +52,7 @@ def connect_event():
 def handle_mqtt_messages(client, userdata, message):
     if message.topic == 'webui/battery/voltage':
         socketio.emit('receive_data_battery', {'data': message.payload.decode()}, namespace='/webui')
-    if message.topic == 'webui/matchtime':
+    if message.topic == 'webui/driverstation/matchtime':
         socketio.emit('receive_data_time', {'data': message.payload.decode()}, namespace='/webui')
 
 
