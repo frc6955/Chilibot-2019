@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS imports  -->
+    <link rel="stylesheet" href="../static/styles/bootstrap.css">
+    <link rel="stylesheet" href="../static/styles/chili_style.css">
+    <!-- JS Imports -->
+    <script type='text/javascript' src='../static/scripts/jquery-3.3.1.js'></script>
+    <script type="text/javascript" src="../static/scripts/socket.io.js"></script>
+    <script type='text/javascript' src='../static/scripts/bootstrap.bundle.js'></script>
+    <script type="text/javascript" src="../static/scripts/d3.js"></script>
+    <script type="text/javascript" src="../static/scripts/plotly.js" charset="utf-8"></script>
+    <title>ChiliUI</title>
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>timer</h3>
+                    <div id="timer"></div>
+                </div>
+                <div class="col-sm-4">
+                    <h1>ChiliUI</h1>
+                </div>
+                <div class="col-sm-4 align-self-center">
+                    <canvas id="battery-animation" width="275" height="120"></canvas> 
+                </div>
+    </div>
+</div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <h3>Column 1</h3>
+                <div id="graph"></div>
+            </div>
+            <div class="col-sm-4">
+                <h3>Column 2</h3>
+                <div id="log"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Custom JS script import -->
+    <script type="text/javascript" src="../static/scripts/chiliwebui.js" charset="utf-8"></script>
+</body>
+</html>

@@ -1,15 +1,24 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.cameraserver.CameraServer;
+import frc.robot.util.MQTTReporterManager;
+import frc.robot.util.MQTTReporterManager.MQTTTransmitRate;
 
 public class Robot extends TimedRobot {
-  
-  
 
+  DriverStation dsinfo;
+  MQTTReporterManager mqttLogger;
+
+  
   @Override
   public void robotInit() {
-    CameraServer.getInstance().startAutomaticCapture();
+    // CameraServer.getInstance().startAutomaticCapture();
+    dsinfo = DriverStation.getInstance();
+    mqttLogger = MQTTReporterManager.getInstance();
+    mqttLogger.addValue(()->(RobotController.getBatteryVoltage()), "webui/battery/voltage", MQTTTransmitRate.SLOW);
+    mqttLogger.addValue(()->(dsinfo.getMatchTime()), "webui/driverstation/matchtime", MQTTTransmitRate.SLOW);
   }
 
   @Override
