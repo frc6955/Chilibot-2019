@@ -2,6 +2,7 @@ package frc.robot.subsystem;
 
 import frc.robot.RobotIO;
 import frc.robot.Constantes;
+import frc.robot.Output;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.cscore.VideoSink;
@@ -25,14 +26,9 @@ public class Chasis implements Subsystem {
     UsbCamera frontCam, backCam;
     boolean camFlag;
     VideoSink server;
-    Compressor compresor;
-    Spark leftDriver, rightDriver;
-    DifferentialDrive chassis;
+    private Output outputs;
     private Chasis(int ChasisLeft, int ChasisRight) {
-        leftDriver = new Spark(ChasisLeft);
-        rightDriver = new Spark(ChasisRight);
-        chassis = new DifferentialDrive(leftDriver, rightDriver);
-        
+        outputs = Output.getInstance();
         //Camaras y parametros
         camFlag = false;
         frontCam = CameraServer.getInstance().startAutomaticCapture(0);
@@ -44,12 +40,10 @@ public class Chasis implements Subsystem {
         server = CameraServer.getInstance().getServer();
 
         //Compresor
-        compresor = new Compressor();
-        compresor.setClosedLoopControl(true);
     }
 
     public void driveMode(double left, double right) {
-        this.chassis.arcadeDrive(left, right);
+    outputs.setDifferencialDrive(left, right);    
     }
 
     public void update(RobotIO entradas) {
