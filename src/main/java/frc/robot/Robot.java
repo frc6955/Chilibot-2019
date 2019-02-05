@@ -1,9 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystem.Chasis;
 import frc.robot.subsystem.HPsystem;
 import frc.robot.subsystem.Cargosystem;
+import frc.robot.util.MQTTReporterManager;
+import frc.robot.util.MQTTReporterManager.MQTTTransmitRate;
 
  
 public class Robot extends TimedRobot {
@@ -18,6 +22,10 @@ public class Robot extends TimedRobot {
   Scheduler scheduler;
 
 
+  DriverStation dsinfo;
+  MQTTReporterManager mqttLogger;
+
+  
   @Override
   public void robotInit() {
 
@@ -35,6 +43,11 @@ public class Robot extends TimedRobot {
     scheduler.addSubsystem(hatchPanelIntake);
     scheduler.addSubsystem(Cargo);
 
+    // CameraServer.getInstance().startAutomaticCapture();
+    dsinfo = DriverStation.getInstance();
+    mqttLogger = MQTTReporterManager.getInstance();
+    mqttLogger.addValue(()->(RobotController.getBatteryVoltage()), "webui/battery/voltage", MQTTTransmitRate.SLOW);
+    mqttLogger.addValue(()->(dsinfo.getMatchTime()), "webui/driverstation/matchtime", MQTTTransmitRate.SLOW);
   }
 
   @Override
@@ -54,10 +67,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     scheduler.update(entradas); 
-    //chassis.update(entradas);
-    //hatchPanelIntake.update(entradas);
-    //Cargo.update(entradas);
-
   }
 
   @Override

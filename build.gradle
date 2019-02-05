@@ -12,14 +12,30 @@ deploy {
     targets {
         roboRIO("roborio") {
             team = frc.getTeamNumber()
-            failOnMissing = false
+            // failOnMissing = false
         }
         target('rPiVision') {
             directory = '/home/pi'
             failOnMissing = false
             locations {
                 ssh {
-                    address = 'chilivision2.local'
+                    address = 'chilivision1.local'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+            }
+        }
+        target('WebUI') {
+            directory = '/home/pi'
+            failOnMissing = false
+            locations {
+                ssh {
+                    address = 'chilivision.local'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+                ssh {
+                    address = '10.69.55.20'
                     user = 'pi'
                     password = 'raspberry'
                 }
@@ -45,22 +61,31 @@ deploy {
             files = fileTree(dir: 'vision')
             targets << "rPiVision"
             directory = '/home/pi/code'
+            predeploy << {
+                execute('rw')
+            }
+            postdeploy << {
+                execute('ro')
+            }
+        }
+
+        // Artifact to deploy WebUI files to rPi
+        fileTreeArtifact('WebUICodeDeploy') {
+            files = fileTree(dir: 'web')
+            targets << 'WebUI'
+            directory = '/home/pi/webui'
 
             predeploy << {
                 execute('sudo mount -o remount,rw /')
+                execute('sudo systemctl stop chiliwebui') 
             }
 
             postdeploy << {
+                execute('sudo cp $(pwd)/webui/resources/chiliwebui.service /etc/systemd/system/chiliwebui.service')
+                execute('sudo systemctl daemon-reload; sudo service chiliwebui restart; sudo service chiliwebui status')
+                execute('sudo systemctl enable chiliwebui')
                 execute('sudo mount -o remount,ro /')
             }
-        }
-    }
-}
-
-model {
-    components {
-        chiliVision(NativeExecutableSpec) {
-            useLibrary(it)
         }
     }
 }
@@ -76,6 +101,8 @@ repositories {
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
+    // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
+    compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.1.0'
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
@@ -88,5 +115,7 @@ dependencies {
 // knows where to look for our Robot Class.
 jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    // Necessary to allow use of MQTT library
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
