@@ -11,6 +11,9 @@ public class Constantes {
     public static final int kChassisRight = 1;
     public static final int kMotorIntake = 2;
     public static final int kMotorCargo = 3;
+    ///Joysticks
+    public static final int kDriver = 0;
+    public static final int kOperator = 1;
     //Buttons
     public static final int kButtonA = 1;
     public static final int kButtonB = 2;
@@ -24,12 +27,11 @@ public class Constantes {
     ///CAN
     public static final int kVictor = 4;
     ///Camara
+    public static final int kFront = 0;
+    public static final int kBack = 1;
     public static final int kFPS = 15;
     public static final int kWidth = 320;
     public static final int kHeight = 240;
-    ///Joysticks
-    public static final int kJoystick = 0;
-    public static final int kOperator = 1;
     ///Cargo
     public static final double kCargoIn = -0.6;
     public static final double kCargoOut = 0.8;

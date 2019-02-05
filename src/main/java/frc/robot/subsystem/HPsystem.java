@@ -1,60 +1,57 @@
 package frc.robot.subsystem;
 
 import frc.robot.RobotIO;
-import frc.robot.Constantes;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import frc.robot.Constantes;
+import frc.robot.Output;
 
 public class HPsystem implements Subsystem {
+    
     private static HPsystem instance;
     
     public static HPsystem getInstance() {
         if (instance == null) {
-            instance = new HPsystem(Constantes.kSolenoideHPIntakeIn,Constantes.kSolenoideHPIntakeOut,Constantes.kSolenoideHPReelIn,Constantes.kSolenoideHPReelOut);
+            instance = new HPsystem();
         }
         return instance;
     }
 
-    DoubleSolenoid reel;
-    DoubleSolenoid intake;
+    private Output outputs;
 
-    private HPsystem(int p0, int p1, int p2, int p3) {
-        reel = new DoubleSolenoid(p0, p1);
-       intake = new DoubleSolenoid(p2, p3);
+    private HPsystem() {
+        outputs = Output.getInstance();
     }
 
     public void openThingy (){
-        intake.set(Value.kForward);
+        outputs.setSolenoidIntake(Value.kReverse);
     }
+
     public void closeThingy(){
-        intake.set(Value.kReverse);
+        outputs.setSolenoidIntake(Value.kForward);
     }
+
     public void releaseReel(){
-        reel.set(Value.kForward);
+        outputs.setSolenoidReel(Value.kForward);
     }
+
     public void contractReel(){
-        reel.set(Value.kReverse);
+        outputs.setSolenoidReel(Value.kReverse);
     }
+
     public void update(RobotIO entradas){
         //Control Riel
-        if(entradas.Boton(Constantes.kButtonA, Constantes.kOperator)){
+        if(entradas.operatorButton(Constantes.kButtonA)){
             this.releaseReel();
-          }
-          else if(entradas.Boton(Constantes.kButtonB, Constantes.kOperator)){
+        }
+        else if(entradas.operatorButton(Constantes.kButtonB)){
             this.contractReel();
-          }
-          
-          //Control HP Intake
-          if(entradas.Boton(Constantes.kButtonLB, Constantes.kOperator)){
+        }
+        //Control HP Intake
+        if(entradas.operatorButton(Constantes.kButtonLB)){
             this.openThingy();
-          }
-          else if(entradas.Boton(Constantes.kButtonRB, Constantes.kOperator)){
+        }
+        else if(entradas.operatorButton(Constantes.kButtonRB)){
             this.closeThingy();
-          }
-
+        }
     }
-    
-
-
 }
-

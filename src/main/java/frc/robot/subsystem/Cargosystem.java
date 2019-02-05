@@ -3,46 +3,38 @@ package frc.robot.subsystem;
 //import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.RobotIO;
 import frc.robot.Constantes;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Victor;
+import frc.robot.Output;
 
 public class Cargosystem implements Subsystem {
     private static Cargosystem instance;
 
     public static Cargosystem getInstance() {
         if (instance == null) {
-            instance = new Cargosystem(Constantes.kMotorCargo,Constantes.kVictor);
+            instance = new Cargosystem();
         }
         return instance;
     }
+    private Output output;
 
-    Spark RightMotor;
-    Victor LeftMotor;
-
-
-    private Cargosystem(int c1,int c2) {
-        RightMotor = new Spark(c1);
-        LeftMotor = new Victor(c2);
+    private Cargosystem() {
+        output = Output.getInstance();
     }
     public void RollerIn(){
-        RightMotor.set(Constantes.kCargoIn);
-        LeftMotor.set(Constantes.kCargoIn);
+        output.setRollerMotor(Constantes.kCargoIn, Constantes.kCargoIn);
     }
     public void RollerOut(){
-        RightMotor.set(Constantes.kCargoOut);
-        LeftMotor.set(Constantes.kCargoOut);
+        output.setRollerMotor(Constantes.kCargoOut, Constantes.kCargoOut);
     }
     
     public void RollerStop(){
-        RightMotor.set(Constantes.kCargoStop);
-        LeftMotor.set(Constantes.kCargoStop);
+        output.setRollerMotor(Constantes.kCargoStop, Constantes.kCargoStop);
     }
 
     public void update(RobotIO entradas) {
         //Control Cargo Intake
-        if(entradas.Boton(Constantes.kButtonA, Constantes.kOperator)) {
+        if(entradas.driverButton(Constantes.kButtonA)) {
             this.RollerOut();
-        } else if(entradas.Boton(Constantes.kButtonB, Constantes.kOperator)) {
+        } else if(entradas.driverButton(Constantes.kButtonB)) {
             this.RollerIn();
         } else {
             this.RollerStop();
