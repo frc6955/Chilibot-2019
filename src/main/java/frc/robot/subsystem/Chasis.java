@@ -1,16 +1,9 @@
 package frc.robot.subsystem;
 
 import frc.robot.RobotIO;
+import edu.wpi.cscore.UsbCamera;
 import frc.robot.Constantes;
 import frc.robot.Output;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode;
-import edu.wpi.cscore.VideoSink;
-import edu.wpi.cscore.VideoSource;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 
 public class Chasis implements Subsystem {
@@ -23,40 +16,35 @@ public class Chasis implements Subsystem {
         return instance;
     }
 
-    UsbCamera frontCam, backCam;
+    
     boolean camFlag;
-    VideoSink server;
     private Output outputs;
     private Chasis(int ChasisLeft, int ChasisRight) {
         outputs = Output.getInstance();
         //Camaras y parametros
         camFlag = false;
-        frontCam = CameraServer.getInstance().startAutomaticCapture(0);
-        backCam = CameraServer.getInstance().startAutomaticCapture(1);
-        frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kWidth, Constantes.kHeight, Constantes.kFPS);
-        backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kWidth, Constantes.kHeight, Constantes.kFPS);
-        frontCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-        backCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-        server = CameraServer.getInstance().getServer();
 
-        //Compresor
     }
 
     public void driveMode(double left, double right) {
-    outputs.setDifferencialDrive(left, right);    
+        outputs.setDifferencialDrive(left, right);    
+    }
+
+    public void Stream(UsbCamera cam){
+        outputs.setStream(cam);
     }
 
     public void update(RobotIO entradas) {
-        this.driveMode(entradas.Ejes(Constantes.KAxisY_L, Constantes.kJoystick), entradas.Ejes(Constantes.KAxisX_R, Constantes.kJoystick));
+        this.driveMode(entradas.driverAxis(Constantes.KAxisY_L), entradas.driverAxis(Constantes.KAxisX_R));
         
         if(camFlag){
-            server.setSource(backCam);
+            this.Stream(entradas.Cam(Constantes.kFront));
         }
         else{
-            server.setSource(frontCam);
+            this.Stream(entradas.Cam(Constantes.kBack));
         }
 
-        if(entradas.Boton(Constantes.kButtonLB, Constantes.kJoystick)){
+        if(entradas.driverButton(Constantes.kButtonLB)){
             camFlag = !camFlag;
         }
     }

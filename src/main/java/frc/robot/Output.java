@@ -1,16 +1,15 @@
 package frc.robot;
 
-import frc.robot.subsystem.Cargosystem;
-import frc.robot.subsystem.Chasis;
-import frc.robot.subsystem.HPsystem;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Compressor;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSink;
+import edu.wpi.first.cameraserver.CameraServer;
 
 
 
@@ -26,7 +25,9 @@ public class Output {
     //Definir Cargosystem
     private Spark RightMotor;
     private Victor LeftMotor;
-    
+    //Streaming
+    private VideoSink server;
+
     public static Output getInstance() {
         if (instance == null) {
             instance = new Output();
@@ -47,6 +48,8 @@ public class Output {
         //Cargosystem
         RightMotor = new Spark(Constantes.kMotorCargo);
         LeftMotor = new Victor(Constantes.kMotorIntake);
+        //Streaming
+        server = CameraServer.getInstance().getServer();
     }
 
     public void setRollerMotor(double speedLeft, double speedRight) {
@@ -61,6 +64,10 @@ public class Output {
     }
     public void setDifferencialDrive(double Y,double X){
         Chassis.arcadeDrive(Y, X);
+    }
+
+    public void setStream(UsbCamera cam){
+        server.setSource(cam);
     }
 
 }

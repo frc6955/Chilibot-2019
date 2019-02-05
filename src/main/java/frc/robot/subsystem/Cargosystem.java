@@ -32,9 +32,9 @@ public class Cargosystem implements Subsystem {
 
     public void update(RobotIO entradas) {
         //Control Cargo Intake
-        if(entradas.Boton(Constantes.kButtonA, Constantes.kOperator)) {
+        if(entradas.driverButton(Constantes.kButtonA)) {
             this.RollerOut();
-        } else if(entradas.Boton(Constantes.kButtonB, Constantes.kOperator)) {
+        } else if(entradas.driverButton(Constantes.kButtonB)) {
             this.RollerIn();
         } else {
             this.RollerStop();

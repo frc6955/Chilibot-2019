@@ -36,31 +36,20 @@ public class HPsystem implements Subsystem {
     public void update(RobotIO entradas){
         //Control Riel
 
-        if(entradas.Boton(Constantes.kButtonA,Constantes.kOperator)){
+        if(entradas.operatorButton(Constantes.kButtonA)){
             this.releaseReel();
           }
-          else if(entradas.Boton(Constantes.kButtonB,Constantes.kOperator)){
-
-        if(entradas.Boton(Constantes.kButtonA, Constantes.kOperator)){
-            this.releaseReel();
-          }
-          else if(entradas.Boton(Constantes.kButtonB, Constantes.kOperator)){
-
+        
+        else if(entradas.operatorButton(Constantes.kButtonB)){
             this.contractReel();
           }
           
           //Control HP Intake
 
-          if(entradas.Boton(Constantes.kButtonLB,Constantes.kOperator)){
+          if(entradas.operatorButton(Constantes.kButtonLB)){
             this.openThingy();
           }
-          else if(entradas.Boton(Constantes.kButtonRB,Constantes.kOperator)){
-          }
-          if(entradas.Boton(Constantes.kButtonLB, Constantes.kOperator)){
-            this.openThingy();
-          }
-          else if(entradas.Boton(Constantes.kButtonRB, Constantes.kOperator)){
-
+          else if(entradas.operatorButton(Constantes.kButtonRB)){
             this.closeThingy();
           }
 
@@ -69,5 +58,5 @@ public class HPsystem implements Subsystem {
 
 
 }
-}
+
 
