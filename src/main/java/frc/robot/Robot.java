@@ -1,15 +1,40 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.cameraserver.CameraServer;
+import frc.robot.subsystem.Chasis;
+import frc.robot.subsystem.HPsystem;
+import frc.robot.subsystem.Cargosystem;
 
+ 
 public class Robot extends TimedRobot {
-  
-  
+
+  RobotIO entradas;
+
+  Output output;
+  Chasis chassis;
+  Cargosystem Cargo;
+  HPsystem hatchPanelIntake;
+
+  Scheduler scheduler;
+
 
   @Override
   public void robotInit() {
-    CameraServer.getInstance().startAutomaticCapture();
+
+    //Inputs
+    entradas = RobotIO.getInstance();
+
+    //Sistemas
+    chassis = Chasis.getInstance();
+    Cargo = Cargosystem.getInstance();
+    hatchPanelIntake = HPsystem.getInstance();
+
+    
+    scheduler = Scheduler.getInstance();
+    scheduler.addSubsystem(chassis);
+    scheduler.addSubsystem(hatchPanelIntake);
+    scheduler.addSubsystem(Cargo);
+
   }
 
   @Override
@@ -28,6 +53,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    scheduler.update(entradas); 
+    //chassis.update(entradas);
+    //hatchPanelIntake.update(entradas);
+    //Cargo.update(entradas);
 
   }
 
