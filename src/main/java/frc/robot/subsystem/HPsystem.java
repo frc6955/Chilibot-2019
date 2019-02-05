@@ -6,6 +6,7 @@ import frc.robot.Constantes;
 import frc.robot.Output;
 
 public class HPsystem implements Subsystem {
+    
     private static HPsystem instance;
     
     public static HPsystem getInstance() {
@@ -14,6 +15,7 @@ public class HPsystem implements Subsystem {
         }
         return instance;
     }
+
     private Output outputs;
 
     private HPsystem() {
@@ -23,40 +25,33 @@ public class HPsystem implements Subsystem {
     public void openThingy (){
         outputs.setSolenoidIntake(Value.kReverse);
     }
+
     public void closeThingy(){
         outputs.setSolenoidIntake(Value.kForward);
     }
+
     public void releaseReel(){
         outputs.setSolenoidReel(Value.kForward);
     }
+
     public void contractReel(){
         outputs.setSolenoidReel(Value.kReverse);
     }
 
     public void update(RobotIO entradas){
         //Control Riel
-
         if(entradas.operatorButton(Constantes.kButtonA)){
             this.releaseReel();
-          }
-        
+        }
         else if(entradas.operatorButton(Constantes.kButtonB)){
             this.contractReel();
-          }
-          
-          //Control HP Intake
-
-          if(entradas.operatorButton(Constantes.kButtonLB)){
+        }
+        //Control HP Intake
+        if(entradas.operatorButton(Constantes.kButtonLB)){
             this.openThingy();
-          }
-          else if(entradas.operatorButton(Constantes.kButtonRB)){
+        }
+        else if(entradas.operatorButton(Constantes.kButtonRB)){
             this.closeThingy();
-          }
-
+        }
     }
-    
-
-
 }
-
-
