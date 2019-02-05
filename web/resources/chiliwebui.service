@@ -1,0 +1,15 @@
+[Unit]
+Description=ChiliWebUI Flask Server
+After=mosquitto.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=/usr/bin/env python3 /home/pi/webui/main.py
+WorkingDirectory=/home/pi
+
+[Install]
+WantedBy=multi-user.target
