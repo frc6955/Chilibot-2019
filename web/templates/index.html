@@ -16,55 +16,62 @@
     <title>ChiliUI</title>
 </head> 
 <body>
-    <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">                  
-                    <div id="clockdiv">
-                        <div>
-                            <span class="minutes"></span>
-                            <div class="smalltext">Mins</div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div>
+                    <h1 id="title">ChiliUI</h1>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <div class="container-fluid"> 
+        <div class="row">
+            <div class="col-sm-7 text-center">
+                <img width="90%" src="http://chilivision.local:1181/stream.mjpg">
+            </div>
+            <div class="col-sm-5 ">
+                <div class="row">
+                    <div class="col-sm-6">
+                         <div id="clockdiv">
+                            <div>
+                                <span class="minutes"></span>
+                                <div class="smalltext">Mins</div>
+                            </div>
+                            <div>
+                                <span class="seconds"></span>
+                                <div class="smalltext">Secs</div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-sm-6">
                         <div>
-                            <span class="seconds"></span>
-                            <div class="smalltext">Secs</div>
+                            <canvas id="battery-animation" width="275" height="120"></canvas> 
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <h1>ChiliUI</h1>
-                </div>
-                <div class="col-sm-4 align-self-center">
-                    <canvas id="battery-animation" width="275" height="120"></canvas> 
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="graph"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
+    </div> 
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-8">
-                <h3>Column 1</h3>
-                <div id="graph"></div>
-            </div>
             <div class="col-sm-4">
-                <h3>Column 2</h3>
-                <div id="log"></div>
-            </div>
-        </div>
-    </div>
-    <div class='container'>
-        <div class="row">
-            <div class='col-sm-4'>
                 <img id='imgMagnet' src= "../static/images/magnet.svg" width="150">
             </div>
             <div class="col-sm-4">
-                <p>c2</p>
-            </div>
-            <div class="col-sm-4">
-                <p>c3</p>
-            </div>
+                    <p>brazo</p>
+                </div>
+                <div class="col-sm-4">
+                        <p>cam2</p>
+                </div>
         </div>
-    </div>
+    </div>   
+
     <!-- Custom JS script import -->
     <script type="text/javascript" src="../static/scripts/chiliwebui.js" charset="utf-8"></script>
 </body>

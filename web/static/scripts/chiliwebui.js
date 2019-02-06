@@ -11,11 +11,20 @@ $(document).ready(function() {
     // Create a Plotly.JS graph with 30 null samples
     var arrayLength = 30
     var batteryVoltageTrace = new Array(arrayLength).fill(0);
+    var layout = {
+        margin: {
+          l: 47,
+          r: 34,
+          b: 30,
+          t: 28,
+          pad: 4
+        }
+    };
     Plotly.plot('graph', [{
         y: batteryVoltageTrace,
         mode: 'lines',
-        line: {color: '#80CAF6'}
-    }]);
+        line: {color: '#80CAF6'} 
+    }], layout);
 
     /**
      * Codigo de listeners. Aqui se declaran los listeners de eventos de WebSockets. Los listeners disponibles son:

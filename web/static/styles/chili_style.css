@@ -1,6 +1,9 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #CEDDEF;
+	background-color: #CEDDEF;
+	margin: 0;
+	padding: 0;
+	width: 100vw;
 }
 
 #clockdiv{
@@ -29,4 +32,8 @@ body {
 .smalltext{
 	padding-top: 5px;
 	font-size: 16px;
+}
+
+#title{
+	text-align: center;
 }
