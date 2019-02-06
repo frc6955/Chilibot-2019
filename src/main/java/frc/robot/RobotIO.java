@@ -4,7 +4,7 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
-
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
@@ -17,6 +17,7 @@ public class RobotIO {
     private Joystick operator;
     private PowerDistributionPanel PDP;
     private UsbCamera frontCam, backCam;
+    private ADXRS450_Gyro gyro;
     private static RobotIO instance;
     public static RobotIO getInstance() {
         if (instance == null) {
@@ -29,6 +30,7 @@ public class RobotIO {
         driver = new Joystick(joystickDriver);
         operator = new Joystick(joystickOperator);
         PDP = new PowerDistributionPanel();
+        gyro = new ADXRS450_Gyro();
         
         frontCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kFront);
         backCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kBack);
@@ -61,6 +63,10 @@ public class RobotIO {
 
     public double Corriente(int canal){
         return PDP.getCurrent(canal);
+    }
+
+    public double getGyroAngle(){
+        return gyro.getAngle();
     }
 
     public UsbCamera Cam(int cam){

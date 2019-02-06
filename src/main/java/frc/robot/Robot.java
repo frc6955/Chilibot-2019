@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-
+ 
     //Inputs
     entradas = RobotIO.getInstance();
 
@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
     mqttLogger = MQTTReporterManager.getInstance();
     mqttLogger.addValue(()->(RobotController.getBatteryVoltage()), "webui/battery/voltage", MQTTTransmitRate.SLOW);
     mqttLogger.addValue(()->(dsinfo.getMatchTime()), "webui/driverstation/matchtime", MQTTTransmitRate.SLOW);
+    mqttLogger.addValue(()->(entradas.getGyroAngle()), "webui/sensors/gyro", MQTTTransmitRate.FAST);
   }
 
   @Override

@@ -54,6 +54,18 @@ $(document).ready(function() {
     });
     socket.on('receive_data_time', function(payload){
         var number = payload['data'];
-        $('#timer').html('<p>Tiempo restante: ' + number+ '</p>');
+        var seconds = Math.floor(number % 60);
+        var minutes = Math.floor((number / 60) % 60);
+
+        var minuteSpan = $('#clockdiv').find('.minutes');
+        var secondSpan = $('#clockdiv').find('.seconds');
+
+        minuteSpan.html(minutes);
+        secondSpan.html(seconds);
+    });
+    socket.on('receive_data_angle', function(payload){
+        var number = parseFloat(payload['data']);
+        // console.log(number);
+        $("#imgMagnet").rotate(number);
     });
 });

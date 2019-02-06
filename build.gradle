@@ -60,12 +60,12 @@ deploy {
         fileTreeArtifact('rPiCodeDeploy') {
             files = fileTree(dir: 'vision')
             targets << "rPiVision"
-            directory = '/home/pi/code'
+            directory = '/home/pi'
             predeploy << {
-                execute('rw')
+                execute('sudo mount -o remount,rw /')
             }
             postdeploy << {
-                execute('ro')
+                execute('sudo mount -o remount,ro /')
             }
         }
 

@@ -11,16 +11,25 @@
     <script type="text/javascript" src="../static/scripts/socket.io.js"></script>
     <script type='text/javascript' src='../static/scripts/bootstrap.bundle.js'></script>
     <script type="text/javascript" src="../static/scripts/d3.js"></script>
+    <script type='text/javascript' src="../static/scripts/jQueryRotate.js"></script>
     <script type="text/javascript" src="../static/scripts/plotly.js" charset="utf-8"></script>
     <title>ChiliUI</title>
-</head>
+</head> 
 <body>
-    <div class="jumbotron text-center">
+    <div>
         <div class="container">
             <div class="row">
-                <div class="col-sm-4">
-                    <h3>timer</h3>
-                    <div id="timer"></div>
+                <div class="col-sm-4">                  
+                    <div id="clockdiv">
+                        <div>
+                            <span class="minutes"></span>
+                            <div class="smalltext">Mins</div>
+                        </div>
+                        <div>
+                            <span class="seconds"></span>
+                            <div class="smalltext">Secs</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-sm-4">
                     <h1>ChiliUI</h1>
@@ -28,8 +37,8 @@
                 <div class="col-sm-4 align-self-center">
                     <canvas id="battery-animation" width="275" height="120"></canvas> 
                 </div>
-    </div>
-</div>
+            </div>
+        </div>
     </div>
     <div class="container">
         <div class="row">
@@ -40,6 +49,19 @@
             <div class="col-sm-4">
                 <h3>Column 2</h3>
                 <div id="log"></div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div class="row">
+            <div class='col-sm-4'>
+                <img id='imgMagnet' src= "../static/images/magnet.svg" width="150">
+            </div>
+            <div class="col-sm-4">
+                <p>c2</p>
+            </div>
+            <div class="col-sm-4">
+                <p>c3</p>
             </div>
         </div>
     </div>

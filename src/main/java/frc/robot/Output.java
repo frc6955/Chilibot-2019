@@ -44,7 +44,7 @@ public class Output {
         compresor.setClosedLoopControl(true);
         //HPsystem
         Reel = new DoubleSolenoid(Constantes.kSolenoideHPReelIn, Constantes.kSolenoideHPReelOut);
-        Intake = new DoubleSolenoid(Constantes.kSolenoideHPIntakeIn, Constantes.kSolenoideHPReelOut);
+        Intake = new DoubleSolenoid(Constantes.kSolenoideHPIntakeIn, Constantes.kSolenoideHPIntakeOut);
         //Cargosystem
         RightMotor = new Spark(Constantes.kMotorCargo);
         LeftMotor = new Victor(Constantes.kMotorIntake);
