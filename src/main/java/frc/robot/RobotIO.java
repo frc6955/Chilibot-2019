@@ -1,5 +1,7 @@
 package frc.robot;
 
+import org.json.JSONObject;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.cscore.VideoSource;
@@ -29,7 +31,7 @@ public class RobotIO {
     private RobotIO (int joystickDriver, int joystickOperator) {
         driver = new Joystick(joystickDriver);
         operator = new Joystick(joystickOperator);
-        PDP = new PowerDistributionPanel();
+        PDP = new PowerDistributionPanel(39);
         gyro = new ADXRS450_Gyro();
         
         frontCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kFront);
@@ -63,6 +65,27 @@ public class RobotIO {
 
     public double Corriente(int canal){
         return PDP.getCurrent(canal);
+    }
+
+    public double armCurrent () {
+        return this.Corriente(Constantes.kPDPArmChannel1) + this.Corriente(Constantes.kPDPArmChannel2);
+    }
+
+    public double chassisCurrent(){
+        return this.Corriente(Constantes.kChassisPDP1) + this.Corriente(Constantes.kChassisPDP2) + this.Corriente(Constantes.kChassisPDP3) + this.Corriente(Constantes.kChassisPDP4);
+    }
+
+    public double intakeCurrent(){
+        return this.Corriente(Constantes.kIntakeL) + this.Corriente(Constantes.kIntakeR);
+    }
+
+    public String getAllCurrents(){
+
+        JSONObject jsonData = new JSONObject();
+        jsonData.put("arm", this.armCurrent());
+        jsonData.put("chassis", this.chassisCurrent());
+        jsonData.put("intake", this.intakeCurrent());
+        return jsonData.toString(4);
     }
 
     public double getGyroAngle(){

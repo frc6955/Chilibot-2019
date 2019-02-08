@@ -2,10 +2,15 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Compressor;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
@@ -23,10 +28,13 @@ public class Output {
     //Definir HPsystem
     private DoubleSolenoid Reel,Intake;
     //Definir Cargosystem
-    private Spark RightMotor;
-    private Victor LeftMotor;
+    private VictorSPX RightMotor;
+    private VictorSPX LeftMotor;
     //Streaming
     private VideoSink server;
+    //Arm
+    private TalonSRX RightArm;
+    private TalonSRX LeftArm;
 
     public static Output getInstance() {
         if (instance == null) {
@@ -46,15 +54,22 @@ public class Output {
         Reel = new DoubleSolenoid(Constantes.kSolenoideHPReelIn, Constantes.kSolenoideHPReelOut);
         Intake = new DoubleSolenoid(Constantes.kSolenoideHPIntakeIn, Constantes.kSolenoideHPIntakeOut);
         //Cargosystem
-        RightMotor = new Spark(Constantes.kMotorCargo);
-        LeftMotor = new Victor(Constantes.kMotorIntake);
+        RightMotor = new VictorSPX(Constantes.kMotorCargo);
+        LeftMotor = new VictorSPX(Constantes.kMotorIntake);
         //Streaming
         server = CameraServer.getInstance().getServer();
+        //Arm
+        RightArm = new TalonSRX(Constantes.kRightArm);
+        LeftArm = new TalonSRX(Constantes.kLeftArm);
     }
 
     public void setRollerMotor(double speedLeft, double speedRight) {
-        RightMotor.set(speedRight);
-        LeftMotor.set(speedLeft);
+        RightMotor.set(ControlMode.PercentOutput,speedRight);
+        LeftMotor.set(ControlMode.PercentOutput,speedLeft);
+    }
+    public void setArmMotor (double speedL, double speedR){
+        RightArm.set(ControlMode.PercentOutput, speedL);
+        LeftArm.set(ControlMode.Follower, speedR);
     }
     public void setSolenoidIntake(Value solenoidIntake) {
         Reel.set(solenoidIntake);

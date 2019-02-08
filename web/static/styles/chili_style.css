@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	background-color: #CEDDEF;
+	background-color: #273674;
 	margin: 0;
 	padding: 0;
 	width: 100vw;
@@ -34,6 +34,14 @@ body {
 	font-size: 16px;
 }
 
-#title{
-	text-align: center;
+#Logo{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 20%;
 }
+
+#marginLogo{
+	padding-bottom: 1%;
+}
+

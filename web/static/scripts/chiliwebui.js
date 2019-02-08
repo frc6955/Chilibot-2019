@@ -8,23 +8,24 @@ $(document).ready(function() {
     // Connect to websockets server with namespace /webui
     namespace = '/webui';
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
-    // Create a Plotly.JS graph with 30 null samples
+    // Create a Plotly.JS graph to display stacked currents
     var arrayLength = 30
-    var batteryVoltageTrace = new Array(arrayLength).fill(0);
-    var layout = {
-        margin: {
-          l: 47,
-          r: 34,
-          b: 30,
-          t: 28,
-          pad: 4
+    var currentTraces = {
+        'arm': new Array(arrayLength).fill(0),
+        'chassis': new Array(arrayLength).fill(0)
+    }
+    // var armTrace = new Array(arrayLength).fill(0);
+    Plotly.newPlot('graph', [
+        {
+            y: currentTraces.arm, stackgroup: 'one'
+        }, 
+        {
+            y: currentTraces.chassis, stackgroup: 'one'
+        },
+        {
+            y:currentTraces.intake, stackgroup: 'one'
         }
-    };
-    Plotly.plot('graph', [{
-        y: batteryVoltageTrace,
-        mode: 'lines',
-        line: {color: '#80CAF6'} 
-    }], layout);
+    ]);
 
     /**
      * Codigo de listeners. Aqui se declaran los listeners de eventos de WebSockets. Los listeners disponibles son:
@@ -52,29 +53,42 @@ $(document).ready(function() {
         canvas2DBattery.fillRect(260, 40, 15, 50)
         canvas2DBattery.fillStyle = "#40FF00";
         canvas2DBattery.fillRect(10, 10, (240 / 13) * number, 100);
-        // To plot updated battery voltage trace, add new data point
-        batteryVoltageTrace = batteryVoltageTrace.concat(number);
-        // The remove first data point to "shift" forward
-        batteryVoltageTrace.splice(0, 1);
-        // Update Plotly plot on 'graph' ID with shifted array
-        Plotly.update('graph', {
-            y: [batteryVoltageTrace]
-        });
     });
+
     socket.on('receive_data_time', function(payload){
         var number = payload['data'];
         var seconds = Math.floor(number % 60);
         var minutes = Math.floor((number / 60) % 60);
-
         var minuteSpan = $('#clockdiv').find('.minutes');
         var secondSpan = $('#clockdiv').find('.seconds');
-
         minuteSpan.html(minutes);
         secondSpan.html(seconds);
     });
+
     socket.on('receive_data_angle', function(payload){
         var number = parseFloat(payload['data']);
-        // console.log(number);
         $("#imgMagnet").rotate(number);
+    });
+
+    socket.on('receive_data_all_currents', function(payload){
+        var currentsJSONString = payload['data'];
+        var currentsJSON = JSON.parse(currentsJSONString);
+        // console.log(currentsJSON);
+
+        currentTraces.arm = currentTraces.arm.concat(currentsJSON.arm);
+        currentTraces.arm.splice(0, 1);
+
+        currentTraces.chassis = currentTraces.chassis.concat(currentsJSON.chassis);
+        currentTraces.chassis.splice(0,1);
+
+        currentTraces.intake = currentTraces.intake.concat(currentsJSON.intake);
+        currentTraces.intake.splice(0,1);
+        Plotly.update('graph', {
+            y: [
+                currentTraces.arm,
+                currentTraces.chassis,
+                currentTraces.intake
+            ]
+        });
     });
 });
