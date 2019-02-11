@@ -31,16 +31,25 @@ def connect_event():
     mqtt.subscribe('webui/#', qos=0)
     num_clients += 1
     print("Conexiones hasta el momento:", num_clients)
-    emit('connection_confirmed', {
-        'client_id': num_clients
-    }, namespace='/webui')
+    emit('client_number', {
+        'data': num_clients
+    }, namespace='/webui', broadcast=True)
+
+@socketio.on('disconnect', namespace='/webui')
+def disconnect_event():
+    global num_clients
+    num_clients -= 1
+    print("Conexiones hasta el momento:", num_clients)
+    emit('client_number', {
+        'data': num_clients
+    }, namespace='/webui', broadcast=True)
 
 @socketio.on('broadcast', namespace='/webui')
 def broadcast_echo(payload):
     print("Received broadcast request!\n{}".format(payload))
     emit(payload['event'], {
         'data': payload['data']
-    }, broadcast=True, namespace='/webui')
+    }, namespace='/webui', broadcast=True)
 
 @mqtt.on_message()
 def handle_mqtt_messages(client, userdata, message):
@@ -55,5 +64,5 @@ def handle_mqtt_messages(client, userdata, message):
 
 
 if __name__ == '__main__':
-    print('hola')
+    print('Initializing Chili UI Flask server')
     socketio.run(app, host='0.0.0.0', debug=True)

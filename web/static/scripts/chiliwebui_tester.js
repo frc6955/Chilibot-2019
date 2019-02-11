@@ -36,4 +36,24 @@ $(document).ready(function() {
             'data': $("#test-angle").val()
         });
     });
+
+    $("#battery-test").submit(function(event) {
+        event.preventDefault();
+        socket.emit('broadcast', {
+            'event': "receive_data_battery",
+            'data': $("#test-battery").val()
+        });
+    });
+
+    $("#currents-test").submit(function(event) {
+        event.preventDefault();
+        socket.emit('broadcast', {
+            'event': "receive_data_all_currents",
+            'data': {
+                "arm": parseFloat($("#test-currents-arm").val()),
+                "chassis": parseFloat($("#test-currents-chassis").val()),
+                "intake": parseFloat($("#test-currents-intake").val())
+            }
+        });
+    });
 });
