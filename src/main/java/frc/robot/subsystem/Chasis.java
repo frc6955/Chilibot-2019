@@ -47,10 +47,10 @@ public class Chasis implements Subsystem {
             this.Stream(entradas.Cam(Constantes.kBack));
         }
 
-        if(entradas.driverButton(Constantes.kButtonLB)){
+        if(entradas.driverButton(Constantes.kButtonX)){
             camFlag = !camFlag;
         }
-        if(entradas.driverButton(Constantes.kButtonY)){
+        if(entradas.driverButton(Constantes.kButtonB)){
             double error = entradas.getVisionError();
             if (error != -1) {
                 double u = -1 * error * Constantes.kVisionAlignKp;

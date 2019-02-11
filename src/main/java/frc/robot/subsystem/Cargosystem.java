@@ -20,24 +20,37 @@ public class Cargosystem implements Subsystem {
         output = Output.getInstance();
     }
     public void RollerIn(){
-        output.setRollerMotor(Constantes.kCargoIn, Constantes.kCargoIn);
+        output.setRollerMotor(Constantes.kCargoIn);
     }
     public void RollerOut(){
-        output.setRollerMotor(Constantes.kCargoOut, Constantes.kCargoOut);
+        output.setRollerMotor(Constantes.kCargoOut);
     }
     
     public void RollerStop(){
-        output.setRollerMotor(Constantes.kCargoStop, Constantes.kCargoStop);
+        output.setRollerMotor(Constantes.kCargoStop);
+    }
+    public void ArmUp(){
+        output.setRollerArm(Constantes.KCargoUp);
+    }
+
+    public void ArmDown(){
+        output.setRollerArm(Constantes.KCargoDown);
     }
 
     public void update(RobotIO entradas) {
         //Control Cargo Intake
-        if(entradas.driverButton(Constantes.kButtonA)) {
+        if(entradas.driverButton(Constantes.kButtonLB)) {
             this.RollerOut();
-        } else if(entradas.driverButton(Constantes.kButtonB)) {
+        } else if(entradas.driverButton(Constantes.kButtonRB)) {
             this.RollerIn();
         } else {
             this.RollerStop();
+        }
+        if(entradas.driverButton(Constantes.kButtonA)){
+            this.ArmDown();
+        }
+        else if(entradas.driverButton(Constantes.kButtonY)){
+            this.ArmUp();
         }
     }
 }

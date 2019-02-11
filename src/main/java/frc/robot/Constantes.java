@@ -6,11 +6,9 @@ public class Constantes {
     public static final int kSolenoideHPIntakeOut = 1;
     public static final int kSolenoideHPReelIn = 2;
     public static final int kSolenoideHPReelOut = 3 ;
-    ///Motores
+    ///Chasis
     public static final int kChassisLeft = 0;
     public static final int kChassisRight = 1;
-    public static final int kMotorIntake = 2;
-    public static final int kMotorCargo = 3;
     ///Joysticks
     public static final int kDriver = 0;
     public static final int kOperator = 1;
@@ -25,8 +23,13 @@ public class Constantes {
     public static final int KAxisY_L = 1;
     public static final int KAxisX_R = 4;
     ///CAN
-    public static final int kVictor = 4;
-    public static final int kPdp = 39;
+        public static final int kPdp = 39;
+        //Brazo
+        public static final int KTalonL = 11;
+        public static final int KTalonR = 12;
+        //Intake
+        public static final int KMotorLeft = 9;
+        public static final int kMotorRight = 10;
     ///Camara
     public static final int kFront = 0;
     public static final int kBack = 1;
@@ -37,6 +40,8 @@ public class Constantes {
     public static final double kCargoIn = -0.6;
     public static final double kCargoOut = 0.8;
     public static final double kCargoStop = 0.0;
+    public static final double KCargoDown = -0.2;
+    public static final double KCargoUp = 0.2;
     //Vision
     public static final double KCenter = 160;
     public static final double KRotateR = 0.2;

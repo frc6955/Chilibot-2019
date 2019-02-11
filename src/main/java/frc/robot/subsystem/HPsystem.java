@@ -43,7 +43,7 @@ public class HPsystem implements Subsystem {
         if(entradas.operatorButton(Constantes.kButtonA)){
             this.releaseReel();
         }
-        else if(entradas.operatorButton(Constantes.kButtonB)){
+        else if(entradas.operatorButton(Constantes.kButtonY)){
             this.contractReel();
         }
         //Control HP Intake

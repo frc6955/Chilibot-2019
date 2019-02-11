@@ -1,12 +1,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Victor;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Compressor;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -14,6 +15,9 @@ import edu.wpi.first.cameraserver.CameraServer;
 
 
 public class Output {
+    //Brazo
+    private TalonSRX TalonLeft;
+    private TalonSRX TalonRight; 
     //Instancia
     private static Output instance;
     //Definir Chassis
@@ -23,8 +27,8 @@ public class Output {
     //Definir HPsystem
     private DoubleSolenoid Reel,Intake;
     //Definir Cargosystem
-    private Spark RightMotor;
-    private Victor LeftMotor;
+    private VictorSPX RightMotor;
+    private VictorSPX LeftMotor;
     //Streaming
     private VideoSink server;
 
@@ -46,28 +50,46 @@ public class Output {
         Reel = new DoubleSolenoid(Constantes.kSolenoideHPReelIn, Constantes.kSolenoideHPReelOut);
         Intake = new DoubleSolenoid(Constantes.kSolenoideHPIntakeIn, Constantes.kSolenoideHPIntakeOut);
         //Cargosystem
-        RightMotor = new Spark(Constantes.kMotorCargo);
-        LeftMotor = new Victor(Constantes.kMotorIntake);
+        RightMotor = new VictorSPX(Constantes.kMotorRight);
+        LeftMotor = new VictorSPX(Constantes.KMotorLeft);
         //Streaming
         server = CameraServer.getInstance().getServer();
-    }
+        //Brazo instancia
+        TalonLeft = new TalonSRX(Constantes.KTalonL);
+        TalonRight = new TalonSRX(Constantes.KTalonR);
 
-    public void setRollerMotor(double speedLeft, double speedRight) {
-        RightMotor.set(speedRight);
-        LeftMotor.set(speedLeft);
     }
+    //Brazo
+    public void setRollerArm(double Speed){
+        TalonRight.set(ControlMode.Follower,Constantes.KTalonL);
+        TalonLeft.set(ControlMode.PercentOutput,Speed);
+    }
+    //Intake
+    public void setRollerMotor(double speed) {
+        LeftMotor.set(ControlMode.Follower,Constantes.kMotorRight);
+        RightMotor.set(ControlMode.PercentOutput,speed);
+    }
+    //HatchPanel
     public void setSolenoidIntake(Value solenoidIntake) {
         Reel.set(solenoidIntake);
     }
     public void setSolenoidReel(Value solenoidReel){
         Intake.set(solenoidReel);
     }
+    //Chassis
     public void setDifferencialDrive(double Y,double X){
         Chassis.arcadeDrive(Y, X);
     }
-
+    //Camara
     public void setStream(UsbCamera cam){
         server.setSource(cam);
     }
 
 }
+
+
+
+
+
+
+
