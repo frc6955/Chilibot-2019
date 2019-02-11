@@ -6,7 +6,7 @@ import frc.robot.Constantes;
 import frc.robot.Output;
 
 public class HPsystem implements Subsystem {
-    
+     
     private static HPsystem instance;
     
     public static HPsystem getInstance() {

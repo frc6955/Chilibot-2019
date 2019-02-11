@@ -19,15 +19,17 @@ public class Chasis implements Subsystem {
     
     boolean camFlag;
     private Output outputs;
+    double entry;
     private Chasis(int ChasisLeft, int ChasisRight) {
         outputs = Output.getInstance();
         //Camaras y parametros
         camFlag = false;
-
+        
     }
 
     public void driveMode(double left, double right) {
-        outputs.setDifferencialDrive(left, right);    
+        outputs.setDifferencialDrive(left, right); 
+        //IO.GetEntry(); 
     }
 
     public void Stream(UsbCamera cam){
@@ -35,6 +37,7 @@ public class Chasis implements Subsystem {
     }
 
     public void update(RobotIO entradas) {
+
         this.driveMode(entradas.driverAxis(Constantes.KAxisY_L), entradas.driverAxis(Constantes.KAxisX_R));
         
         if(camFlag){
@@ -46,6 +49,16 @@ public class Chasis implements Subsystem {
 
         if(entradas.driverButton(Constantes.kButtonLB)){
             camFlag = !camFlag;
+        }
+        if(entradas.driverButton(Constantes.kButtonY)){
+            double error = entradas.getVisionError();
+            if (error != -1) {
+                double u = -1 * error * Constantes.kVisionAlignKp;
+                this.outputs.Chassis.arcadeDrive(entradas.driverAxis(Constantes.KAxisY_L), u, true);
+            }
+            else{
+                this.outputs.Chassis.arcadeDrive(0, 0);
+            }
         }
     }
 }

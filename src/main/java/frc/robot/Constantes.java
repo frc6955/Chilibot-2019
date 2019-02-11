@@ -26,6 +26,7 @@ public class Constantes {
     public static final int KAxisX_R = 4;
     ///CAN
     public static final int kVictor = 4;
+    public static final int kPdp = 39;
     ///Camara
     public static final int kFront = 0;
     public static final int kBack = 1;
@@ -36,6 +37,11 @@ public class Constantes {
     public static final double kCargoIn = -0.6;
     public static final double kCargoOut = 0.8;
     public static final double kCargoStop = 0.0;
-
+    //Vision
+    public static final double KCenter = 160;
+    public static final double KRotateR = 0.2;
+    public static final double KRotateL = -0.2;
+    public static final double KO = 0;
+	public static final double kVisionAlignKp = 1/(Constantes.kWidth / 2);
 
 }

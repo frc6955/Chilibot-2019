@@ -18,7 +18,7 @@ public class Output {
     private static Output instance;
     //Definir Chassis
     private Spark ChassisLeft,ChassisRight;
-    private DifferentialDrive Chassis;
+    public DifferentialDrive Chassis;
     private Compressor compresor;
     //Definir HPsystem
     private DoubleSolenoid Reel,Intake;
@@ -44,7 +44,7 @@ public class Output {
         compresor.setClosedLoopControl(true);
         //HPsystem
         Reel = new DoubleSolenoid(Constantes.kSolenoideHPReelIn, Constantes.kSolenoideHPReelOut);
-        Intake = new DoubleSolenoid(Constantes.kSolenoideHPIntakeIn, Constantes.kSolenoideHPReelOut);
+        Intake = new DoubleSolenoid(Constantes.kSolenoideHPIntakeIn, Constantes.kSolenoideHPIntakeOut);
         //Cargosystem
         RightMotor = new Spark(Constantes.kMotorCargo);
         LeftMotor = new Victor(Constantes.kMotorIntake);
@@ -71,11 +71,3 @@ public class Output {
     }
 
 }
-
-
-
-
-
-
-
-
