@@ -31,7 +31,7 @@ public class RobotInput {
     private RobotInput() {
         driver = new Joystick(Constantes.kJoystickUSBDriver);
         operator = new Joystick(Constantes.kJoystickUSBOperator);
-        PDP = new PowerDistributionPanel();
+        PDP = new PowerDistributionPanel(Constantes.kPDPCANID);
         
         frontCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kFront);
         backCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kBack);
@@ -42,9 +42,7 @@ public class RobotInput {
         frontCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
         backCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
         inst = NetworkTableInstance.getDefault();
-        table = inst.getTable("vision");
-        table.getKeys();
-
+        table = inst.getTable(Constantes.kVisionNTTable);
     }
 
     public boolean driverButton(int button){

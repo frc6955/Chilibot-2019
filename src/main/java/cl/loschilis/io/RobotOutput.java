@@ -39,7 +39,7 @@ public class RobotOutput {
         chassisRight = new Spark(Constantes.kMotorPWMChassisRight);
         chassis = new DifferentialDrive(chassisLeft, chassisRight);
         // Compressor
-        compressor = new Compressor(Constantes.kCompressorCANID);
+        compressor = new Compressor(Constantes.kPCMCANID);
         // Hatch Panel Intake (Rail and finger) Solenoids
         hpIntakeRail = new DoubleSolenoid(Constantes.kSolenoidChannelIntakeRetract, Constantes.kSolenoidChannelIntakeExtend);
         hpIntakeFinger = new DoubleSolenoid(Constantes.kSolenoidChannelFingerOpen, Constantes.kSolenoidChannelFingerClose);
@@ -74,6 +74,10 @@ public class RobotOutput {
 
     public void setRollerMotor(double speed) {
         intakeLeft.set(ControlMode.PercentOutput, speed);
+    }
+
+    public void setArmMotor(double speed) {
+        armMaster.set(ControlMode.PercentOutput, speed);
     }
 
     public void setHPIntakeRail(Value railPosition) {

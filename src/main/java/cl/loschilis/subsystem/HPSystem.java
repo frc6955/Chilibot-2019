@@ -39,7 +39,7 @@ public class HPSystem implements SubSystemInterface {
         if(entradas.operatorButton(Constantes.kJoystickButtonA)){
             this.extendIntake(salidas);
         }
-        else if(entradas.operatorButton(Constantes.kJoystickButtonB)){
+        else if(entradas.operatorButton(Constantes.kJoystickButtonY)){
             this.contractIntake(salidas);
         }
 
