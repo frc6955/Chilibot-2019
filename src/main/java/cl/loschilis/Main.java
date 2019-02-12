@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package cl.loschilis;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
