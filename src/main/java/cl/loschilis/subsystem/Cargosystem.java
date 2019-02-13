@@ -28,6 +28,10 @@ public class Cargosystem implements SubSystemInterface {
         robotOutput.setRollerMotor(Constantes.kSpeedIntakeStop);
     }
 
+    private void rollerUltraSonic(RobotOutput robotOutput) {
+        robotOutput.setRollerMotor(Constantes.kSpeedUltraSonic);
+    }
+
     private void armUp(RobotOutput robotOutput) {
         robotOutput.setArmMotor(Constantes.kSpeedArmUp);
     }
@@ -43,7 +47,12 @@ public class Cargosystem implements SubSystemInterface {
         } else if(entradas.driverButton(Constantes.kJoystickButtonRB)) {
             this.rollerIn(salidas);
         } else {
-            this.rollerStop(salidas);
+            if(entradas.analogInputCount()<40){
+                this.rollerUltraSonic(salidas);
+            }
+            else{
+                this.rollerStop(salidas);
+            }
         }
 
         if (entradas.driverButton(Constantes.kJoystickButtonA)) {

@@ -46,6 +46,7 @@ public class Constantes {
     public static final double kSpeedIntakeIn = -0.6;
     public static final double kSpeedIntakeOut = 0.8;
     public static final double kSpeedIntakeStop = 0.0;
+    public static final double kSpeedUltraSonic = 0.05;
     public static final double kSpeedArmUp = 0.2;
     public static final double kSpeedArmDown = -0.2;
     // MQTTReporter configurations

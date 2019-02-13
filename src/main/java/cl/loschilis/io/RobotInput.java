@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 
 public class RobotInput {
@@ -20,6 +21,7 @@ public class RobotInput {
     private UsbCamera frontCam, backCam;
     private NetworkTableInstance inst; 
     private NetworkTable table;
+    private AnalogInput analogInput;
 
     public static RobotInput getInstance() {
         if (instance == null) {
@@ -32,6 +34,7 @@ public class RobotInput {
         driver = new Joystick(Constantes.kJoystickUSBDriver);
         operator = new Joystick(Constantes.kJoystickUSBOperator);
         PDP = new PowerDistributionPanel(Constantes.kPDPCANID);
+        analogInput = new AnalogInput(0);
         
         frontCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kFront);
         backCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kBack);
@@ -41,8 +44,10 @@ public class RobotInput {
 
         frontCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
         backCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
+        
         inst = NetworkTableInstance.getDefault();
         table = inst.getTable(Constantes.kVisionNTTable);
+        System.out.println(analogInputCount());
     }
 
     public boolean driverButton(int button){
@@ -68,6 +73,11 @@ public class RobotInput {
     public double getCorrienteCanal(int canal){
         return PDP.getCurrent(canal);
         
+    }
+
+    public double analogInputCount(){
+        double dist = (analogInput.getVoltage() / 5)* 1023/2;
+      return dist;
     }
 
     public UsbCamera Cam(int cam){
