@@ -37,6 +37,14 @@ $(document).ready(function() {
         });
     });
 
+    $("#arm-test").submit(function(event) {
+        event.preventDefault();
+        socket.emit('broadcast', {
+            'event': "receive_data_arm",
+            'data': $("#test-arm").val()
+        });
+    });
+
     $("#battery-test").submit(function(event) {
         event.preventDefault();
         socket.emit('broadcast', {

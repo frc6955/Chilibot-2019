@@ -2,9 +2,11 @@ $(document).ready(function() {
     /**
      * Codigo de inicializacion. Aqui se prepara WebSockets, Plotly.JS y los Canvas
      */
-    // Obtain canvas object for battery voltage display
+     // Obtain canvas object for battery voltage display
+
     var canvasBattery = document.getElementById("battery-animation");
     var canvas2DBattery = canvasBattery.getContext("2d");
+
     // Connect to websockets server with namespace /webui
     namespace = '/webui';
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace, { 'sync disconnect on unload': true });
@@ -103,6 +105,16 @@ $(document).ready(function() {
     socket.on('receive_data_angle', function(payload){
         var number = parseFloat(payload['data']);
         $("#imgMagnet").rotate(number);
+    });
+
+    // receive_data_arm listener: Displays robot arm position
+    socket.on('receive_data_arm', function(payload){
+        var number = parseFloat(payload['data']);
+        $("#armImage").rotate({
+            angle: -1 * number,
+            center: [0, 154]
+        });
+
     });
 
     socket.on('receive_data_all_currents', function(payload){

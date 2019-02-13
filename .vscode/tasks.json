@@ -6,7 +6,7 @@
         {
             "label": "Run ChiliUI Server",
             "type": "shell",
-            "command": "python web/main.py"
+            "command": "python3 web/main.py"
         }
     ]
 }
