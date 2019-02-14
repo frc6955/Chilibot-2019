@@ -10,36 +10,65 @@
     <script type='text/javascript' src='../static/scripts/jquery-3.3.1.js'></script>
     <script type="text/javascript" src="../static/scripts/socket.io.js"></script>
     <script type='text/javascript' src='../static/scripts/bootstrap.bundle.js'></script>
+    <script type='text/javascript' src="../static/scripts/jQueryRotate.js"></script>
     <script type="text/javascript" src="../static/scripts/d3.js"></script>
     <script type="text/javascript" src="../static/scripts/plotly.js" charset="utf-8"></script>
-    <title>ChiliUI</title>
-</head>
+    <title>Chili UI</title>
+</head> 
 <body>
-    <div class="jumbotron text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <h3>timer</h3>
-                    <div id="timer"></div>
-                </div>
-                <div class="col-sm-4">
-                    <h1>ChiliUI</h1>
-                </div>
-                <div class="col-sm-4 align-self-center">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-sm-4 text-center">
+                <div>
                     <canvas id="battery-animation" width="275" height="120"></canvas> 
                 </div>
-    </div>
-</div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-8">
-                <h3>Column 1</h3>
-                <div id="graph"></div>
             </div>
-            <div class="col-sm-4">
-                <h3>Column 2</h3>
-                <div id="log"></div>
+            <div class="col-sm-4 text-center" id="col1">
+                <div id="marginLogo">
+                    <img id="logo" src="../static/images/logo.svg">
+                </div>
+            </div>
+            <div class="col-sm-2 text-center">
+                <div id="clockdiv">
+                    <div>
+                        <span class="minutes"></span>
+                        <!-- <div class="smalltext">mins</div> -->
+                    </div>
+                    <div>
+                        <span class="seconds"></span>
+                        <!-- <div class="smalltext">secs</div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 text-center">
+                <h3 id="connection_state">Disconnected</h3>
+            </div>
+        </div>
+    </div>    
+    <div class="container-fluid"> 
+        <div class="row">
+            <div class="col-sm-7 align-self-center text-center">
+                <!-- No Filming by Xinh Studio from the Noun Project -->
+                <img id="driverCam" width="90%" src="http://chilivision.local:1181/stream.mjpg" onerror="this.onerror=null;this.style.width='30%';this.src='../static/images/feed_down.svg';" />
+            </div>
+            <div class="col-sm-5">
+                <div class="row">
+                    <div id="graph"></div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4 align-self-center text-center">
+                <img id='imgMagnet' src= "../static/images/robot_gyro.svg" width="35%">
+            </div>
+            <div class="col-sm-4 align-self-center text-center">
+                <img id ="armImage" src="../static/images/arm.svg" width="50%">
+            </div>
+            <div class="col-sm-4 align-self-center text-center">
+                <!-- No Filming by Xinh Studio from the Noun Project -->
+                <img width="90%" src="http://chilivision1.local:1181/stream.mjpg" onerror="this.onerror=null;this.style.width='20%';this.src='../static/images/feed_down.svg';" />
             </div>
         </div>
     </div>

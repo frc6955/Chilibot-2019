@@ -4,6 +4,15 @@ public class Constantes {
     // CAN Peripherals
     public static final int kPCMCANID = 1;
     public static final int kPDPCANID = 39;
+    // PDP Channels
+    public static final int kPDPChannelChassisRightA = 0;
+    public static final int kPDPChannelChassisRightB = 1;
+    public static final int kPDPChannelChassisLeftA = 2;
+    public static final int kPDPChannelChassisLeftB = 3;
+    public static final int kPDPChannelArmMaster = 15;
+    public static final int kPDPChannelArmSlave = 14;
+    public static final int kPDPChannelIntakeMaster = 13;
+    public static final int kPDPChannelIntakeSlave = 12;
     // Solenoides
     public static final int kSolenoidChannelFingerClose = 0;
     public static final int kSolenoidChannelFingerOpen = 1;

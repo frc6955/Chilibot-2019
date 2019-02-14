@@ -13,7 +13,6 @@ deploy {
     targets {
         roboRIO("roborio") {
             team = frc.getTeamNumber()
-            // failOnMissing = false
         }
         target('rPiVision') {
             directory = '/home/pi'
@@ -21,6 +20,11 @@ deploy {
             locations {
                 ssh {
                     address = 'chilivision1.local'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+                ssh {
+                    address = '10.69.55.21'
                     user = 'pi'
                     password = 'raspberry'
                 }
@@ -104,6 +108,7 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
     compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.1.0'
+    compile group: 'org.json', name: 'json', version: '20180813'
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
