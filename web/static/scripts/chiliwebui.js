@@ -7,6 +7,9 @@ $(document).ready(function() {
     var canvasBattery = document.getElementById("battery-animation");
     var canvas2DBattery = canvasBattery.getContext("2d");
 
+    var emptyArm = "../static/images/arm.svg";
+    var armWithBall = "../static/images/arm+ball.svg";
+
     // Connect to websockets server with namespace /webui
     namespace = '/webui';
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace, { 'sync disconnect on unload': true });
@@ -28,7 +31,14 @@ $(document).ready(function() {
         font: {
             family: "'Open-Sans', sans-serif",
             size: 16,
-            color: "#fff"
+            color: 'fff'
+        },
+        margin:{
+            l: 47,
+            r: 34,
+            b: 30,
+            t: 40,
+            pad: 4
         }
     });
 
@@ -78,12 +88,12 @@ $(document).ready(function() {
         // The msg variable is the dictionary payload and contains the keys specified by the server
         var number = payload["data"];
         // Battery canvas animation: Clear canvas, draw battery shape, draw 'charge' of battery proportionally
-        canvas2DBattery.clearRect(0, 0, 275, 120);
+        canvas2DBattery.clearRect(0, 0, 255, 100);
         canvas2DBattery.fillStyle = "#000000";
-        canvas2DBattery.fillRect(0, 0, 260, 120);
-        canvas2DBattery.fillRect(260, 40, 15, 50)
+        canvas2DBattery.fillRect(0, 0, 240, 100);
+        canvas2DBattery.fillRect(240, 28, 15, 50)
         canvas2DBattery.fillStyle = "#40FF00";
-        canvas2DBattery.fillRect(10, 10, (240 / 13) * number, 100);
+        canvas2DBattery.fillRect(10, 10, (220 / 13) * number, 80);
     });
 
     // receive_data_time listener: Displays time left in match in seconds
@@ -115,6 +125,39 @@ $(document).ready(function() {
             center: [0, 154]
         });
 
+    });
+
+    socket.on('receive_data_ball', function(payload){
+        var ballStatus = payload["data"];
+
+        if (ballStatus){
+            var currentImageSrc = $('#armImage').attr("src");
+            if (currentImageSrc != armWithBall){
+                console.log("cambiando a armWithBall");
+                $('#armImage').attr("src", armWithBall);
+            }
+        } else {
+            var currentImageSrc = $('#armImage').attr("src");
+            if (currentImageSrc != emptyArm) {
+                console.log("cambiando a emptyArm");
+                $('#armImage').attr("src", emptyArm);
+            }
+        }
+    });
+
+    socket.on('receive_data_camera',function(payload){
+        var camStatus = payload['data'];
+        
+        if (camStatus == -250) {
+            $("#driverCam").css("border-style", "none");
+        } else if (Math.abs(camStatus) > 5) {
+            $("#driverCam").css("border-style", "solid");
+            $("#driverCam").css("border-color", "red");
+        } else {
+            $("#driverCam").css("border-style", "solid");
+            $("#driverCam").css("border-color", "green");
+        }
+            $("#driverCam").css("border-color", "red");
     });
 
     socket.on('receive_data_all_currents', function(payload){

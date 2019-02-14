@@ -1,5 +1,4 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	background-color: #273674;
 	margin: 0;
 	padding: 0;
@@ -7,32 +6,35 @@ body {
 }
 
 #clockdiv{
-	font-family: sans-serif;
-	color: #fff;
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
 	display: inline-block;
 	font-weight: 100;
 	text-align: center;
-	font-size: 30px;
+	font-size: 45px;
 }
 
 #clockdiv > div{
 	padding: 5px;
 	border-radius: 3px;
-	background: #00BF96;
-	display: inline-block;
-}
+	background: white;
+	display: inline-block; 
+} 
 
 #clockdiv div > span{
-	padding: 25px;
-	border-radius: 3px;
-	background: #00816A;
-	display: inline-block;
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	border-radius: 2px; 
+	background: #273674;
+	display: inline-block; 
 }
 
 .smalltext{
-	padding-top: 5px;
-	font-size: 16px;
-}
+	padding-top: 2px;
+	font-size: 15px; 
+ }
 
 #logo{
 	display: block;
@@ -43,8 +45,14 @@ body {
 
 #marginLogo{
 	padding-bottom: 1%;
+	height: auto;
 }
 
 #connection_state {
     color: red;
+}
+
+#driverCam {
+	border-style: solid;
+	border-width: 5px;
 }

@@ -53,6 +53,16 @@ $(document).ready(function() {
         });
     });
 
+    $("#ball-test").submit(function(event) {
+        event.preventDefault();
+        var ballVal = $("#test-ball").val();
+        var ballData = ballVal == 1 ? true : false;
+        socket.emit('broadcast', {
+            'event': "receive_data_ball",
+            'data': ballData
+        });
+    });
+
     $("#currents-test").submit(function(event) {
         event.preventDefault();
         socket.emit('broadcast', {
