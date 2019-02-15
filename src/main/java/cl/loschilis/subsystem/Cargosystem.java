@@ -59,6 +59,8 @@ public class Cargosystem implements SubSystemInterface {
             this.armDown(salidas);
         } else if (entradas.driverButton(Constantes.kJoystickButtonY)) {
             this.armUp(salidas);
+        } else {
+            salidas.setArmMotor(0);
         }
     }
 }

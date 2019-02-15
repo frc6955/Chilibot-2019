@@ -81,8 +81,8 @@ public class RobotInput {
     }
 
     public double analogInputCount(){
-        double dist = (analogInput.getVoltage() / 5)* 1023/2;
-      return dist;
+        double dist = (analogInput.getVoltage() / 5) * 1023 / 2;
+        return dist;
     }
 
     public double armCurrent () {
