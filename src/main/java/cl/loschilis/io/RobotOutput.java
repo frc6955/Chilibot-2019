@@ -93,7 +93,7 @@ public class RobotOutput {
     }
 
     public void setFPSDrive(double forwardSpeed, double rotationSpeed) {
-        this.chassis.arcadeDrive(forwardSpeed, rotationSpeed);
+        this.chassis.arcadeDrive(-1*forwardSpeed, rotationSpeed);
     }
 
     public void setStream(UsbCamera cam){
