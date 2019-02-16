@@ -23,7 +23,7 @@ public class Chasis implements SubSystemInterface {
     }
 
     private void driveMode(RobotOutput robotOutput, double left, double right) {
-        robotOutput.setFPSDrive(left, right);
+        robotOutput.setCuratureDrive(left, right);
     }
 
     private void stream(RobotOutput robotOutput, UsbCamera cam) {

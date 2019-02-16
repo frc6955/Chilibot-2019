@@ -39,6 +39,9 @@ public class Cargosystem implements SubSystemInterface {
     private void armDown(RobotOutput robotOutput) {
         robotOutput.setArmMotor(Constantes.kSpeedArmDown);
     }
+    private void armStop(RobotOutput robotOutput) {
+        robotOutput.setArmMotor(Constantes.kSpeedArmStop);
+    }
 
     @Override
     public void update(RobotInput entradas, RobotOutput salidas) {
@@ -60,7 +63,7 @@ public class Cargosystem implements SubSystemInterface {
         } else if (entradas.driverButton(Constantes.kJoystickButtonY)) {
             this.armUp(salidas);
         } else {
-            salidas.setArmMotor(0);
+            this.armStop(salidas);
         }
     }
 }
