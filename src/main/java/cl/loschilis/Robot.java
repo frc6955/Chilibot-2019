@@ -4,9 +4,12 @@ import cl.loschilis.util.Scheduler;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import cl.loschilis.subsystem.Chasis;
 import cl.loschilis.subsystem.HPSystem;
 import cl.loschilis.io.RobotOutput;
+
+
 import cl.loschilis.io.RobotInput;
 import cl.loschilis.subsystem.Cargosystem;
 import cl.loschilis.util.MQTTReporterManager;
@@ -27,9 +30,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        //Inputs
-        entradas = RobotInput.getInstance();
+        //Inputs. OUTPUT MUST BE DECLARED BEFORE INPUT
         salidas = RobotOutput.getInstance();
+        entradas = RobotInput.getInstance();
         //Sistemas
         chassis = Chasis.getInstance();
         Cargo = Cargosystem.getInstance();
@@ -46,30 +49,26 @@ public class Robot extends TimedRobot {
         mqttLogger.addValue(()->(dsinfo.getMatchTime()), "webui/driverstation/matchtime", MQTTTransmitRate.SLOW);
         mqttLogger.addValue(()->(entradas.getGyroAngle()), "webui/sensors/gyro", MQTTTransmitRate.FAST);
         mqttLogger.addValue(()->(entradas.getAllCurrents()), "webui/pdp/all", MQTTTransmitRate.SLOW);
-    }
-
-    @Override
-    public void robotPeriodic() {
-
+        // mqttLogger.addValue(()->(entradas.getArmAngle()), "webui/sensors/arm", MQTTTransmitRate.FAST);
     }
 
     @Override
     public void autonomousInit() {
-
+        salidas.homeArm();
     }
 
     @Override
     public void autonomousPeriodic() {
+        scheduler.update(entradas, salidas);
+    }
 
+    @Override
+    public void teleopInit() {
+        salidas.homeArm();
     }
 
     @Override
     public void teleopPeriodic() {
         scheduler.update(entradas, salidas);
-    }
-
-    @Override
-    public void testPeriodic() {
-
     }
 }

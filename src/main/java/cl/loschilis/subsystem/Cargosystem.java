@@ -2,6 +2,9 @@ package cl.loschilis.subsystem;
 
 import cl.loschilis.io.RobotInput;
 import cl.loschilis.io.RobotOutput;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import cl.loschilis.Constantes;
 
 
@@ -50,20 +53,29 @@ public class Cargosystem implements SubSystemInterface {
         } else if(entradas.driverButton(Constantes.kJoystickButtonRB)) {
             this.rollerIn(salidas);
         } else {
-            if(entradas.analogInputCount()<40){
+            if(entradas.analogInputCount() < 40){
+                this.rollerStop(salidas);
+            } else {
                 this.rollerUltraSonic(salidas);
             }
-            else{
-                this.rollerStop(salidas);
+        }
+        if (entradas.driverPOV() == -1) {
+            if (entradas.driverButton(Constantes.kJoystickButtonA)) {
+                this.armDown(salidas);
+            } else if (entradas.driverButton(Constantes.kJoystickButtonY)) {
+                this.armUp(salidas);
+            } else {
+                this.armStop(salidas);
+            }
+        } else {
+            if (entradas.driverPOV() == 0) {
+                salidas.armMaster.set(ControlMode.MotionMagic, Constantes.kArmHardStop);
+            } else if (entradas.driverPOV() == 90) {
+                salidas.armMaster.set(ControlMode.MotionMagic, Constantes.kArmRocket);
+            } else if (entradas.driverPOV() == 180) {
+                salidas.armMaster.set(ControlMode.MotionMagic, Constantes.kArmFloor);
             }
         }
-
-        if (entradas.driverButton(Constantes.kJoystickButtonA)) {
-            this.armDown(salidas);
-        } else if (entradas.driverButton(Constantes.kJoystickButtonY)) {
-            this.armUp(salidas);
-        } else {
-            this.armStop(salidas);
-        }
+        
     }
 }

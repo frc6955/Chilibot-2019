@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2019.2.1"
+    id "edu.wpi.first.GradleRIO" version "2019.3.2"
     id "cpp"
     id "idea"
 }
@@ -70,6 +70,7 @@ deploy {
                 execute('sudo mount -o remount,rw /')
             }
             postdeploy << {
+                execute('sudo chmod 755 ~/multiCameraServer.py')
                 execute('sudo mount -o remount,ro /')
             }
         }

@@ -60,7 +60,11 @@ def handle_mqtt_messages(client, userdata, message):
     if message.topic == 'webui/sensors/gyro':
         socketio.emit('receive_data_angle', {'data': message.payload.decode()}, namespace='/webui')
     if message.topic == 'webui/pdp/all': 
-        socketio.emit('receive_data_all_currents', {'data': message.payload.decode()}, namespace='/webui') 
+        socketio.emit('receive_data_all_currents', {'data': message.payload.decode()}, namespace='/webui')
+    if message.topic == 'webui/sensors/arm': 
+        socketio.emit('receive_data_arm', {'data': message.payload.decode()}, namespace='/webui')
+
+    
 
 
 if __name__ == '__main__':

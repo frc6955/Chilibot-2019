@@ -1,9 +1,11 @@
 package cl.loschilis;
  
 public class Constantes {
+    // Sensors
+    public static final int kAnalogMaxbotixBallDetector = 0;
     // CAN Peripherals
-    public static final int kPCMCANID = 1;
-    public static final int kPDPCANID = 39;
+    public static final int kPDPCANID = 1;
+    public static final int kPCMCANID = 2;
     // PDP Channels
     public static final int kPDPChannelChassisRightA = 0;
     public static final int kPDPChannelChassisRightB = 1;
@@ -53,7 +55,7 @@ public class Constantes {
     public static final int kHeight = 240;
     // Cargo Arm Speeds
     public static final double kSpeedIntakeIn = -0.6;
-    public static final double kSpeedIntakeOut = 0.8;
+    public static final double kSpeedIntakeOut = 0.4;
     public static final double kSpeedIntakeStop = 0.0;
     public static final double kSpeedUltraSonic = 0.05;
     public static final double kSpeedArmUp = 0.4;
@@ -70,4 +72,25 @@ public class Constantes {
     public static final double KO = 0;
 	public static final double kVisionAlignKp = 1/(Constantes.kWidth / 2);
     public static final String kVisionNTTable = "vision";
+    // Talon SRX PID Configurations
+    public static final int kTalonConfigSlotIdx = 0;
+    public static final int kTalonConfigPIDLoopIdx = 0;
+    public static final int kTalonConfigTimeoutMs = 100;
+    public static final double kTalonConfigkP = 1.7;
+    public static final double kTalonConfigkI = 0;
+    public static final double kTalonConfigkD = 0;
+    public static final double kTalonConfigkF = 0;
+    public static final int kTalonConfigEps = 2;
+    public static final int kTalonConfigIZone = 0;
+    public static final boolean kTalonConfigSensorPhase = false;
+    public static final double kTalonConfigPeakForward = 1.0;
+    public static final double kTalonConfigPeakReverse = -1.0;
+    public static final int kTalonConfigMotionCruise = 80;
+    public static final int kTalonConfigMotionAcceleration = 140;
+    // PID Setpoints
+    public static final int kArmHome = 0;
+    public static final int kArmHardStop = -3;
+    public static final int kArmRocket = -450;
+    public static final int kArmFloor = -675;
+    public static final double kArmHomingSpeed = 0.25;
 }

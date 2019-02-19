@@ -12,7 +12,7 @@ import sys
 
 import numpy as np
 import cv2 as cv
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
 from cscore import CameraServer, VideoSource, UsbCamera, MjpegServer
 from networktables import NetworkTablesInstance
@@ -243,7 +243,7 @@ if __name__ == "__main__":
             print ("yT = ", yT)
             # cv2.rectangle(dilationT, (xT, yT), (xT+2, yT+2),(0,0,255), 2)
         else:
-            xT, yT = -1, -1
+            xT, yT = -250, -250
         # Calculate moments Cargo
         # momentsC = cv2.moments(maskC)
         # areaC = momentsC['m00']

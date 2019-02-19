@@ -35,11 +35,11 @@ public class Chasis implements SubSystemInterface {
                 entradas.driverAxis(Constantes.kJoystickAxisLeftY),
                 entradas.driverAxis(Constantes.kJoystickAxisRightX));
         
-        if(camFlag) {
-            stream(salidas, entradas.Cam(Constantes.kFront));
-        } else {
-            stream(salidas, entradas.Cam(Constantes.kBack));
-        }
+        // if(camFlag) {
+        //     stream(salidas, entradas.Cam(Constantes.kFront));
+        // } else {
+        //     stream(salidas, entradas.Cam(Constantes.kBack));
+        // }
 
         if(entradas.driverButton(Constantes.kJoystickButtonX)) camFlag = !camFlag;
 
