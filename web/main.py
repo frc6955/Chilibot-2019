@@ -63,9 +63,8 @@ def handle_mqtt_messages(client, userdata, message):
         socketio.emit('receive_data_all_currents', {'data': message.payload.decode()}, namespace='/webui')
     if message.topic == 'webui/sensors/arm': 
         socketio.emit('receive_data_arm', {'data': message.payload.decode()}, namespace='/webui')
-
-    
-
+    if message.topic == 'webui/sensors/ball':
+        socketio.emit('receive_data_ball', {'data': message.payload.decode()}, namespace='/webui')
 
 if __name__ == '__main__':
     print('Initializing Chili UI Flask server')

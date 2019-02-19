@@ -59,6 +59,8 @@ public class MQTTReporterManager {
                             messageStr = (String) retValue;
                         } else if (retValue instanceof Integer || retValue instanceof Double) {
                             messageStr = this.d3f.format(retValue);
+                        } else if (retValue instanceof Boolean) {
+                            messageStr = (Boolean) retValue ? "true" : "false";
                         } else {
                             System.out.println("Method passed to MQTTReporter is invalid.");
                             this.stopThread();
@@ -69,6 +71,8 @@ public class MQTTReporterManager {
                             this.clientReference.publish(reportable.getTopic(), message);
                         } catch (MqttException me) {
                             me.printStackTrace();
+                            System.out.println("Failed connection. Exiting thread.");
+                            this.stopThread();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -76,8 +80,7 @@ public class MQTTReporterManager {
                         System.out.print(reportable);
                         System.out.println(". Dropping Reportable.");
                         this.reportablesVector.remove(reportable);
-                    }
-                    
+                    }  
                 }
                 try {
                     Thread.sleep(this.refreshRate);

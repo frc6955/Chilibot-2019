@@ -69,7 +69,7 @@ public class Constantes {
     // MQTTReporter configurations
     public static final long fastMQTTRefreshRate = 50;
     public static final long slowMQTTRefreshRate = 250;
-    public static final String brokerHostUrl = "tcp://chilivision.local:1883";
+    public static final String brokerHostUrl = "tcp://10.69.55.20:1883";
     // Vision configurations
     public static final double KCenter = 160;
     public static final double KRotateR = 0.2;

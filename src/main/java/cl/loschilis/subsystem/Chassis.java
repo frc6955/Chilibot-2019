@@ -33,7 +33,7 @@ public class Chassis implements SubSystemInterface {
             salidas.getRobotChassis().arcadeDrive(entradas.getPrimaryJoyAxis(Constantes.kJoystickAxisLeftY), entradas.getPrimaryJoyAxis(Constantes.kJoystickAxisRightX));
         }
 
-        if(entradas.getSecondaryJoyButton(Constantes.kJoystickButtonX)) {
+        if(entradas.getSecondaryJoyButtonOnPress(Constantes.kJoystickButtonX)) {
             displayForwardCamera = !displayForwardCamera;
             entradas.switchCameras();
         }  

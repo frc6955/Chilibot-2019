@@ -75,6 +75,10 @@ public class RobotInput {
         return operator.getRawButton(button);
     }
 
+    public boolean getSecondaryJoyButtonOnPress(int button) {
+        return operator.getRawButtonPressed(button);
+    }
+
     public double getPrimaryJoyPOVAngle() {
         return driver.getPOV(0);
     }
@@ -126,8 +130,8 @@ public class RobotInput {
     }
 
     public void switchCameras() {
-        UsbCamera tempCamLarge = (UsbCamera) serverLarge.getSource();
-        UsbCamera tempCamSmall = (UsbCamera) serverSmall.getSource();
+        VideoSource tempCamLarge = serverLarge.getSource();
+        VideoSource tempCamSmall = serverSmall.getSource();
 
         tempCamLarge.setResolution(Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight);
         tempCamSmall.setResolution(Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight);

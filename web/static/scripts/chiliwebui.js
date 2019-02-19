@@ -33,6 +33,9 @@ $(document).ready(function() {
             size: 16,
             color: 'fff'
         },
+        autosize: false,
+        width: 600,
+        height: 400,
         margin:{
             l: 47,
             r: 34,
@@ -94,6 +97,11 @@ $(document).ready(function() {
         canvas2DBattery.fillRect(240, 28, 15, 50)
         canvas2DBattery.fillStyle = "#40FF00";
         canvas2DBattery.fillRect(10, 10, (220 / 13) * number, 80);
+        // Write on canvas
+        canvas2DBattery.font = "30px Arial";
+        canvas2DBattery.fillStyle = "white";
+        canvas2DBattery.textAlign = "center";
+        canvas2DBattery.fillText(number + " V", 3 * canvasBattery.width / 8, canvasBattery.height / 2);
     });
 
     // receive_data_time listener: Displays time left in match in seconds
@@ -121,7 +129,7 @@ $(document).ready(function() {
     socket.on('receive_data_arm', function(payload){
         var number = parseFloat(payload['data']);
         $("#armImage").rotate({
-            angle: -1 * number,
+            angle: number - 90,
             center: [0, 154]
         });
 
@@ -129,14 +137,13 @@ $(document).ready(function() {
 
     socket.on('receive_data_ball', function(payload){
         var ballStatus = payload["data"];
-
-        if (ballStatus){
+        if (ballStatus == "true"){
             var currentImageSrc = $('#armImage').attr("src");
             if (currentImageSrc != armWithBall){
                 console.log("cambiando a armWithBall");
                 $('#armImage').attr("src", armWithBall);
             }
-        } else {
+        } else if (ballStatus == "false") {
             var currentImageSrc = $('#armImage').attr("src");
             if (currentImageSrc != emptyArm) {
                 console.log("cambiando a emptyArm");

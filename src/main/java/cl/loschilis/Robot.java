@@ -4,7 +4,6 @@ import cl.loschilis.util.Scheduler;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import cl.loschilis.subsystem.Chassis;
 import cl.loschilis.subsystem.HPSystem;
 import cl.loschilis.io.RobotOutput;
@@ -45,8 +44,9 @@ public class Robot extends TimedRobot {
         mqttLogger.addValue(()->(RobotController.getBatteryVoltage()), "webui/battery/voltage", MQTTTransmitRate.SLOW);
         mqttLogger.addValue(()->(DriverStation.getInstance().getMatchTime()), "webui/driverstation/matchtime", MQTTTransmitRate.SLOW);
         mqttLogger.addValue(()->(entradas.getGyroAngle()), "webui/sensors/gyro", MQTTTransmitRate.FAST);
-        mqttLogger.addValue(()->(entradas.getAllCurrents()), "webui/pdp/all", MQTTTransmitRate.SLOW);
-        // mqttLogger.addValue(()->(entradas.getArmAngle()), "webui/sensors/arm", MQTTTransmitRate.FAST);
+        mqttLogger.addValue(()->(entradas.getAllCurrents()), "webui/pdp/all", MQTTTransmitRate.FAST);
+        mqttLogger.addValue(()->(entradas.getArmAngle()), "webui/sensors/arm", MQTTTransmitRate.FAST);
+        mqttLogger.addValue(()->(entradas.getUltrasonicAdquisition()), "webui/sensors/ball", MQTTTransmitRate.SLOW);
     }
 
     public void initializationRobotRoutine() {
