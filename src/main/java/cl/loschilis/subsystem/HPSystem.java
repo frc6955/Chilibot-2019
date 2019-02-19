@@ -18,36 +18,25 @@ public class HPSystem implements SubSystemInterface {
         return instance;
     }
 
-    private void openFinger(RobotOutput robotOutput) {
-        robotOutput.setSolenoidFinger(Value.kReverse);
-    }
+    @Override
+    public void update(RobotInput entradas, RobotOutput salidas) {
+        if(entradas.getSecondaryJoyButton(Constantes.kJoystickButtonA)){
+            salidas.setHPIntakeRail(Value.kForward);
+        }
+        else if(entradas.getSecondaryJoyButton(Constantes.kJoystickButtonY)){
+            salidas.setHPIntakeRail(Value.kReverse);
+        }
 
-    private void closeFinger(RobotOutput robotOutput) {
-        robotOutput.setSolenoidFinger(Value.kForward);
-    }
-
-    private void extendIntake(RobotOutput robotOutput) {
-        robotOutput.setHPIntakeRail(Value.kForward);
-    }
-
-    private void contractIntake(RobotOutput robotOutput) {
-        robotOutput.setHPIntakeRail(Value.kReverse);
+        if(entradas.getSecondaryJoyButton(Constantes.kJoystickButtonLB)){
+            salidas.setHPIntakeFinger(Value.kReverse);
+        }
+        else if(entradas.getSecondaryJoyButton(Constantes.kJoystickButtonRB)){
+            salidas.setHPIntakeFinger(Value.kForward);
+        }
     }
 
     @Override
-    public void update(RobotInput entradas, RobotOutput salidas) {
-        if(entradas.operatorButton(Constantes.kJoystickButtonA)){
-            this.extendIntake(salidas);
-        }
-        else if(entradas.operatorButton(Constantes.kJoystickButtonY)){
-            this.contractIntake(salidas);
-        }
+    public void stop(RobotInput entradas, RobotOutput salidas) {
 
-        if(entradas.operatorButton(Constantes.kJoystickButtonLB)){
-            this.openFinger(salidas);
-        }
-        else if(entradas.operatorButton(Constantes.kJoystickButtonRB)){
-            this.closeFinger(salidas);
-        }
     }
 }

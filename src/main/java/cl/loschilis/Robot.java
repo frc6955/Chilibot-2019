@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import cl.loschilis.subsystem.Chasis;
+import cl.loschilis.subsystem.Chassis;
 import cl.loschilis.subsystem.HPSystem;
 import cl.loschilis.io.RobotOutput;
 
 
 import cl.loschilis.io.RobotInput;
-import cl.loschilis.subsystem.Cargosystem;
+import cl.loschilis.subsystem.CargoSystem;
 import cl.loschilis.util.MQTTReporterManager;
 import cl.loschilis.util.MQTTReporterManager.MQTTTransmitRate;
 
@@ -20,55 +20,73 @@ public class Robot extends TimedRobot {
     private RobotInput entradas;
     private RobotOutput salidas;
     private Scheduler scheduler;
-
-    private Chasis chassis;
-    private Cargosystem Cargo;
-    private HPSystem hatchPanelIntake;
-
-    private DriverStation dsinfo;
     private MQTTReporterManager mqttLogger;
 
+    private Chassis chassis;
+    private CargoSystem Cargo;
+    private HPSystem hatchPanelIntake;
+    
     @Override
     public void robotInit() {
-        //Inputs. OUTPUT MUST BE DECLARED BEFORE INPUT
+        // I/O. OUTPUT MUST BE DECLARED BEFORE INPUT
         salidas = RobotOutput.getInstance();
         entradas = RobotInput.getInstance();
-        //Sistemas
-        chassis = Chasis.getInstance();
-        Cargo = Cargosystem.getInstance();
+        // Subsistemas
+        chassis = Chassis.getInstance();
+        Cargo = CargoSystem.getInstance();
         hatchPanelIntake = HPSystem.getInstance();
-
+        // Add subsystems to scheduler for updating
         scheduler = Scheduler.getInstance();
         scheduler.addSubsystem(chassis);
         scheduler.addSubsystem(hatchPanelIntake);
         scheduler.addSubsystem(Cargo);
-
-        dsinfo = DriverStation.getInstance();
+        // Configure MQTTLogger reportables
         mqttLogger = MQTTReporterManager.getInstance();
         mqttLogger.addValue(()->(RobotController.getBatteryVoltage()), "webui/battery/voltage", MQTTTransmitRate.SLOW);
-        mqttLogger.addValue(()->(dsinfo.getMatchTime()), "webui/driverstation/matchtime", MQTTTransmitRate.SLOW);
+        mqttLogger.addValue(()->(DriverStation.getInstance().getMatchTime()), "webui/driverstation/matchtime", MQTTTransmitRate.SLOW);
         mqttLogger.addValue(()->(entradas.getGyroAngle()), "webui/sensors/gyro", MQTTTransmitRate.FAST);
         mqttLogger.addValue(()->(entradas.getAllCurrents()), "webui/pdp/all", MQTTTransmitRate.SLOW);
         // mqttLogger.addValue(()->(entradas.getArmAngle()), "webui/sensors/arm", MQTTTransmitRate.FAST);
     }
 
+    public void initializationRobotRoutine() {
+        salidas.homeArm();
+    }
+
+    public void periodicRobotRoutine() {
+        scheduler.update(entradas, salidas);
+    }
+
+    public void disablingRobotRoutine() {
+
+    }
+
+
+
+    // WPILib code
     @Override
     public void autonomousInit() {
-        salidas.homeArm();
+        initializationRobotRoutine();
     }
 
     @Override
     public void autonomousPeriodic() {
-        scheduler.update(entradas, salidas);
+        periodicRobotRoutine();
     }
 
     @Override
     public void teleopInit() {
-        salidas.homeArm();
+        // TODO: Check if arm is already homed to avoid re-homing when starting teleop
+        initializationRobotRoutine();
     }
 
     @Override
     public void teleopPeriodic() {
-        scheduler.update(entradas, salidas);
+        periodicRobotRoutine();
+    }
+
+    @Override
+    public void disabledInit() {
+        disablingRobotRoutine();
     }
 }

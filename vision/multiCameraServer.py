@@ -243,7 +243,7 @@ if __name__ == "__main__":
             print ("yT = ", yT)
             # cv2.rectangle(dilationT, (xT, yT), (xT+2, yT+2),(0,0,255), 2)
         else:
-            xT, yT = -250, -250
+            xT, yT = -255, -255
         # Calculate moments Cargo
         # momentsC = cv2.moments(maskC)
         # areaC = momentsC['m00']

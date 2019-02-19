@@ -1,11 +1,10 @@
 package cl.loschilis.io;
 
 import cl.loschilis.Constantes;
-
-import com.ctre.phoenix.motorcontrol.SensorCollection;
-
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.json.JSONObject;
 
+import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.cscore.VideoSource;
@@ -13,7 +12,6 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -22,16 +20,16 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class RobotInput {
 
     private static RobotInput instance;
-    private RobotOutput salidas;
     private Joystick driver;
     private Joystick operator;
-    private PowerDistributionPanel PDP;
+    private PowerDistributionPanel powerDistPanel;
     private UsbCamera frontCam, backCam;
-    private NetworkTableInstance inst; 
-    private NetworkTable table;
+    private MjpegServer serverLarge, serverSmall;
+    private NetworkTableInstance networkTableInstance; 
+    private NetworkTable visionNTTable;
     private AnalogInput ultraSonicAnalog;
     private ADXRS450_Gyro gyro;
-    private SensorCollection armSensors;
+    private TalonSRX armMasterController;
 
     public static RobotInput getInstance() {
         if (instance == null) {
@@ -43,76 +41,74 @@ public class RobotInput {
     private RobotInput() {
         driver = new Joystick(Constantes.kJoystickUSBDriver);
         operator = new Joystick(Constantes.kJoystickUSBOperator);
-        PDP = new PowerDistributionPanel(Constantes.kPDPCANID);
-        ultraSonicAnalog = new AnalogInput(Constantes.kAnalogMaxbotixBallDetector);
+        powerDistPanel = new PowerDistributionPanel(Constantes.kPDPCANID);
+        ultraSonicAnalog = new AnalogInput(Constantes.kAnalogMaxbotixBallDetectorPin);
         gyro = new ADXRS450_Gyro();
-        salidas = RobotOutput.getInstance();
-        armSensors = salidas.getArmSensors();
-        
-        frontCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kFront);
-        // backCam = CameraServer.getInstance().startAutomaticCapture(Constantes.kBack);
+        armMasterController = RobotOutput.getArmMotorReference();
 
-        frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kWidth, Constantes.kHeight, Constantes.kFPS);
-        // backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kWidth, Constantes.kHeight, Constantes.kFPS);
+        frontCam = new UsbCamera("frontCam", Constantes.kCameraIndexFront);
+        frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight, Constantes.kCameraFPS);
+        backCam = new UsbCamera("backCam", Constantes.kCameraIndexBack);
+        backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight, Constantes.kCameraFPS);
+        serverLarge = CameraServer.getInstance().addServer("LargeServer", 1181);
+        serverSmall = CameraServer.getInstance().addServer("SmallServer", 1182);
+        serverLarge.setSource(frontCam);
+        serverSmall.setSource(backCam);
 
-        frontCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-        // backCam.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-        
-        inst = NetworkTableInstance.getDefault();
-        table = inst.getTable(Constantes.kVisionNTTable);
+        networkTableInstance = NetworkTableInstance.getDefault();
+        visionNTTable = networkTableInstance.getTable(Constantes.kVisionNTTable);
     }
 
-    public boolean driverButton(int button){
-        return driver.getRawButton(button);  
-        
-    }
-    
-    public boolean operatorButton(int button){
-        return operator.getRawButton(button);
-    
-    }
-
-    public double driverAxis(int axis){
+    public double getPrimaryJoyAxis(int axis) {
         return driver.getRawAxis(axis);
-        
     }
 
-    public double operatorAxis(int axis){
+    public double getSecondaryJoyAxis(int axis) {
         return operator.getRawAxis(axis);
-        
     }
 
-    public double driverPOV() {
+    public boolean getPrimaryJoyButton(int button) {
+        return driver.getRawButton(button);  
+    }
+    
+    public boolean getSecondaryJoyButton(int button) {
+        return operator.getRawButton(button);
+    }
+
+    public double getPrimaryJoyPOVAngle() {
         return driver.getPOV(0);
     }
 
-    public double getChannelCurrent(int canal){
-        return PDP.getCurrent(canal);
-        
+    public double getChannelCurrent(int canal) {
+        return powerDistPanel.getCurrent(canal);
     }
 
-    public double analogInputCount(){
-        double dist = (ultraSonicAnalog.getVoltage() / 5) * 1023 / 2;
-        return dist;
+    public double getUltrasonicSensorCm() {
+        return ultraSonicAnalog.getAverageVoltage() / Constantes.kAnalogMaxbotixVoltsPerCentimeter;
     }
 
-    public double armCurrent () {
-        return this.getChannelCurrent(Constantes.kPDPChannelArmMaster) + this.getChannelCurrent(Constantes.kPDPChannelArmSlave);
+    public boolean getUltrasonicAdquisition() {
+        return this.getUltrasonicSensorCm() < Constantes.kAnalogMaxbotixMinimumThreshold;
     }
 
-    public double chassisCurrent(){
+    public double armCurrent() {
+        return this.getChannelCurrent(Constantes.kPDPChannelArmMaster) + 
+        this.getChannelCurrent(Constantes.kPDPChannelArmSlave);
+    }
+
+    public double chassisCurrent() {
         return this.getChannelCurrent(Constantes.kPDPChannelChassisRightA) + 
         this.getChannelCurrent(Constantes.kPDPChannelChassisRightB) + 
         this.getChannelCurrent(Constantes.kPDPChannelChassisLeftA) + 
         this.getChannelCurrent(Constantes.kPDPChannelChassisLeftB);
     }
 
-    public double intakeCurrent(){
-        return this.getChannelCurrent(Constantes.kPDPChannelIntakeMaster) + this.getChannelCurrent(Constantes.kPDPChannelIntakeSlave);
+    public double intakeCurrent() {
+        return this.getChannelCurrent(Constantes.kPDPChannelIntakeMaster) + 
+        this.getChannelCurrent(Constantes.kPDPChannelIntakeSlave);
     }
 
-    public String getAllCurrents(){
-
+    public String getAllCurrents() {
         JSONObject jsonData = new JSONObject();
         jsonData.put("arm", this.armCurrent());
         jsonData.put("chassis", this.chassisCurrent());
@@ -120,24 +116,37 @@ public class RobotInput {
         return jsonData.toString(4);
     }
 
-    public double getGyroAngle(){
+    public double getGyroAngle() {
         return gyro.getAngle();
     }
 
+    // TODO: Implement adequate transformation for angle here
     public double getArmAngle() {
-        return -1 * (90/600) * salidas.armMaster.getSelectedSensorPosition(Constantes.kTalonConfigPIDLoopIdx);
+        return -1 * (90.0 / 600.0) * armMasterController.getSelectedSensorPosition(Constantes.kTalonConfigPIDLoopIdx);
     }
 
-    public UsbCamera Cam(int cam){
-        if(cam == Constantes.kFront){
+    public void switchCameras() {
+        UsbCamera tempCamLarge = (UsbCamera) serverLarge.getSource();
+        UsbCamera tempCamSmall = (UsbCamera) serverSmall.getSource();
+
+        tempCamLarge.setResolution(Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight);
+        tempCamSmall.setResolution(Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight);
+
+        serverLarge.setSource(tempCamSmall);
+        serverSmall.setSource(tempCamLarge);
+    }
+
+    public UsbCamera getUsbCamera(int cam) {
+        if(cam == Constantes.kCameraIndexFront) {
             return frontCam;
-        } else if(cam == Constantes.kBack){
+        } else if(cam == Constantes.kCameraIndexBack) {
             return backCam;
-        } else{
-            return null;
+        } else {
+            throw new IllegalArgumentException("Incorrect camera index!");
         }
     }
-    public double getVisionError(){
-        return table.getEntry("error").getDouble(-250.0);
+
+    public double getVisionError() {
+        return visionNTTable.getEntry("error").getDouble(Constantes.kVisionNoLockState);
     }
 }

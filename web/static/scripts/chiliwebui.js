@@ -148,7 +148,7 @@ $(document).ready(function() {
     socket.on('receive_data_camera',function(payload){
         var camStatus = payload['data'];
         
-        if (camStatus == -250) {
+        if (camStatus == -255) {
             $("#driverCam").css("border-style", "none");
         } else if (Math.abs(camStatus) > 5) {
             $("#driverCam").css("border-style", "solid");

@@ -57,3 +57,7 @@ body {
 	border-width: 10px;
 	border-color: white;
 }
+
+#gyroRobot {
+	margin-top: 25px;
+}

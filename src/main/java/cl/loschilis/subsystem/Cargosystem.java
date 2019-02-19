@@ -8,74 +8,53 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import cl.loschilis.Constantes;
 
 
-public class Cargosystem implements SubSystemInterface {
+public class CargoSystem implements SubSystemInterface {
 
-    private static Cargosystem instance;
+    private static CargoSystem instance;
 
-    public static Cargosystem getInstance() {
+    public static CargoSystem getInstance() {
         if (instance == null) {
-            instance = new Cargosystem();
+            instance = new CargoSystem();
         }
         return instance;
     }
 
-    private void rollerIn(RobotOutput robotOutput) {
-        robotOutput.setRollerMotor(Constantes.kSpeedIntakeIn);
-    }
-
-    private void rollerOut(RobotOutput robotOutput) {
-        robotOutput.setRollerMotor(Constantes.kSpeedIntakeOut);
-    }
-    
-    private void rollerStop(RobotOutput robotOutput) {
-        robotOutput.setRollerMotor(Constantes.kSpeedIntakeStop);
-    }
-
-    private void rollerUltraSonic(RobotOutput robotOutput) {
-        robotOutput.setRollerMotor(Constantes.kSpeedUltraSonic);
-    }
-
-    private void armUp(RobotOutput robotOutput) {
-        robotOutput.setArmMotor(Constantes.kSpeedArmUp);
-    }
-
-    private void armDown(RobotOutput robotOutput) {
-        robotOutput.setArmMotor(Constantes.kSpeedArmDown);
-    }
-    private void armStop(RobotOutput robotOutput) {
-        robotOutput.setArmMotor(Constantes.kSpeedArmStop);
-    }
-
     @Override
     public void update(RobotInput entradas, RobotOutput salidas) {
-        if(entradas.driverButton(Constantes.kJoystickButtonLB)) {
-            this.rollerOut(salidas);
-        } else if(entradas.driverButton(Constantes.kJoystickButtonRB)) {
-            this.rollerIn(salidas);
+        if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonLB)) {
+            salidas.setIntakeMotor(Constantes.kSpeedIntakeOut);
+        } else if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonRB)) {
+            salidas.setIntakeMotor(Constantes.kSpeedIntakeIn);
         } else {
-            if(entradas.analogInputCount() < 40){
-                this.rollerStop(salidas);
+            if (entradas.getUltrasonicAdquisition()) {
+                salidas.setIntakeMotor(Constantes.kSpeedIntakeHold);
             } else {
-                this.rollerUltraSonic(salidas);
+                salidas.setIntakeMotor(Constantes.kSpeedIntakeStop);
             }
         }
-        if (entradas.driverPOV() == -1) {
-            if (entradas.driverButton(Constantes.kJoystickButtonA)) {
-                this.armDown(salidas);
-            } else if (entradas.driverButton(Constantes.kJoystickButtonY)) {
-                this.armUp(salidas);
+        if (entradas.getPrimaryJoyPOVAngle() == -1) {
+            if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonA)) {
+                salidas.setArmSpeed(Constantes.kSpeedArmDown);
+            } else if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonY)) {
+                salidas.setArmSpeed(Constantes.kSpeedArmUp);
             } else {
-                this.armStop(salidas);
+                salidas.setArmSpeed(Constantes.kSpeedArmStop);
             }
         } else {
-            if (entradas.driverPOV() == 0) {
-                salidas.armMaster.set(ControlMode.MotionMagic, Constantes.kArmHardStop);
-            } else if (entradas.driverPOV() == 90) {
-                salidas.armMaster.set(ControlMode.MotionMagic, Constantes.kArmRocket);
-            } else if (entradas.driverPOV() == 180) {
-                salidas.armMaster.set(ControlMode.MotionMagic, Constantes.kArmFloor);
+            // Protect setpoint setting with a flag
+            if (entradas.getPrimaryJoyPOVAngle() == 0) {
+                salidas.setArmPosition(Constantes.kArmHardStop);
+            } else if (entradas.getPrimaryJoyPOVAngle() == 90) {
+                salidas.setArmPosition(Constantes.kArmRocket);
+            } else if (entradas.getPrimaryJoyPOVAngle() == 180) {
+                salidas.setArmPosition(Constantes.kArmFloor);
             }
         }
         
     }
+
+	@Override
+	public void stop(RobotInput entradas, RobotOutput salidas) {
+		
+	}
 }

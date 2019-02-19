@@ -51,24 +51,33 @@ public class MQTTReporterManager {
         @Override
         public void run() {
             while(this.liveThread) {
-                for (MQTTReportable reportable : this.reportablesVector) {
-                    Object retValue = reportable.getMethod().get();
-                    String messageStr;
-                    if (retValue instanceof String) {
-                        messageStr = (String) retValue;
-                    } else if (retValue instanceof Integer || retValue instanceof Double) {
-                        messageStr = this.d3f.format(retValue);
-                    } else {
-                        System.out.println("Method passed to MQTTReporter is invalid.");
-                        this.stopThread();
-                        break;
-                    }
-                    MqttMessage message = new MqttMessage(messageStr.getBytes());
+                for (MQTTReportable reportable : new Vector<MQTTReportable>(this.reportablesVector)) {
                     try {
-                        this.clientReference.publish(reportable.getTopic(), message);
-                    } catch (MqttException me) {
-                        me.printStackTrace();
+                        Object retValue = reportable.getMethod().get();
+                        String messageStr;
+                        if (retValue instanceof String) {
+                            messageStr = (String) retValue;
+                        } else if (retValue instanceof Integer || retValue instanceof Double) {
+                            messageStr = this.d3f.format(retValue);
+                        } else {
+                            System.out.println("Method passed to MQTTReporter is invalid.");
+                            this.stopThread();
+                            break;
+                        }
+                        MqttMessage message = new MqttMessage(messageStr.getBytes());
+                        try {
+                            this.clientReference.publish(reportable.getTopic(), message);
+                        } catch (MqttException me) {
+                            me.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.print("Failed running Reportable on topic: ");
+                        System.out.print(reportable);
+                        System.out.println(". Dropping Reportable.");
+                        this.reportablesVector.remove(reportable);
                     }
+                    
                 }
                 try {
                     Thread.sleep(this.refreshRate);
@@ -94,6 +103,10 @@ public class MQTTReporterManager {
 
         String getTopic() {
             return this.topic;
+        }
+
+        public String toString() {
+            return this.getTopic();
         }
     }
 
