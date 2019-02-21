@@ -172,56 +172,65 @@ if __name__ == "__main__":
     # for cameraConfig in cameraConfigs:
     #     cameras.append(startCamera(cameraConfig))
     # camTargets = cameras[0]
-    camTargets = cv2.VideoCapture(0)
-    camTargets.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 320)
-    camTargets.set(cv2.CV_CAP_PROP_FRAME_HEIGHT, 240)
-    # camCargo = cameras[1]
-    # camCargo.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 320)
-    # camCargo.set(cv2.CV_CAP_PROP_FRAME_HEIGHT, 240)
-    # Capture frame Cargo
-    # camCargo.set(3,320.0)
-    # camCargo.set(4,240.0)
-
+    camera = cv2.VideoCapture(0)
+    camera.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 320)
+    camera.set(cv2.CV_CAP_PROP_FRAME_HEIGHT, 240)
     # mpjpegServer = MjpegServer("CameraBack", "", 1181)
 
     # User code
     sd = ntinst.getTable("vision")
     while(True):
-        # Capture frame Targets
-        _, frame = camTargets.read()
-        # Apply gaussian blurT with 5x5 kernel to Targets
-        blurT = cv2.GaussianBlur(frame,(5,5),0)
-        # Convert to HSV and gray to Targets
-        hsvT = cv2.cvtColor(blurT, cv2.COLOR_BGR2HSV)
-        Thold = cv2.cvtColor(blurT, cv2.COLOR_BGR2GRAY)
-        # SegmentationTargets
-        lower_green = np.array([30, 0, 100], dtype=np.uint8)
-        upper_green = np.array([59, 150, 255], dtype=np.uint8)
-        maskT = cv2.inRange(hsvT,lower_green, upper_green)
-        # Threshold operation Targets
-        ret, thrT = cv2.threshold(maskT, 130, 255, cv2.THRESH_OTSU)
-        #Contours Targets
-        contours, hierarchy = cv2.findContours(thrT,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        contours = sorted(contours, key=cv2.contourArea,reverse=True) 
-        cv2.drawContours(blurT, contours, -1, (0,255,0), 0)
-        perimeters = [cv2.arcLength(contours[i],True) for i in range(len(contours))]   
-       # Morphology to eliminate islands to Targets   
-        resT = cv2.bitwise_and(blurT,blurT, mask= maskT)
-        kernelT = np.ones((15,15),np.float32)/225
-        openingT = cv2.morphologyEx(resT, cv2.MORPH_OPEN, kernelT)
-        erosionT = cv2.erode(openingT,kernelT,iterations = 1)
-        dilationT = cv2.dilate(erosionT,kernelT,iterations = 1)
-        momentsT = cv2.moments(maskT)
-        areaT = momentsT['m00']
-        if(areaT > 20):
-            xT = int(momentsT['m10']/momentsT['m00'])
-            yT = int(momentsT['m01']/momentsT['m00'])
-            print ("xT = ", xT)
-            print ("yT = ", yT)
-        else:
-            xT, yT = -255, -255
-        sd.putNumber("errorTargets", xT)
+     # Capture frame
+    _, frame = camera.read()
 
-        k = cv2.waitKey(20) & 0xFF
-        if k == 27:
-            break
+    # Apply gaussian blur with 5x5 kernel
+
+    blur = cv2.GaussianBlur(frame,(5,5),0)
+    # Conver to HSV and gray
+    
+    hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
+    Thold = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
+    
+    # Segmentation
+    lower_green = np.array([49, 0, 100], dtype=np.uint8)
+    upper_green = np.array([59, 150, 255], dtype=np.uint8)
+    mask = cv2.inRange(hsv,lower_green, upper_green)
+    res = cv2.bitwise_and(blur,blur, mask= mask)
+    # Morphology to eliminate islands   
+    
+    kernel = np.ones((11,11),np.float32)/225
+    opening = cv2.morphologyEx(res, cv2.MORPH_OPEN, kernel)
+    erosion = cv2.erode(opening,kernel,iterations = 1)
+    dilation = cv2.dilate(erosion,kernel,iterations = 1)
+    # Threshold operation
+    
+    ret,thresh = cv2.threshold(mask, 40, 255, 0)
+    #Contours
+    
+    contours,hierachy=cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    if len(contours) != 0:
+        # draw in blue the contours that were founded
+        cv2.drawContours(dilation, contours, -1, 255, 3)
+
+        #find the biggest area
+        c = max(contours, key = cv2.contourArea)
+
+        x,y,w,h = cv2.boundingRect(c)
+        # draw the book contour (in green)
+        cv2.rectangle(dilation,(x,y),(x+w,y+h),(0,255,0),2)
+    # Calculate moments
+    
+    moments = cv2.moments(c)
+    area = moments['m00']
+    if(area > 200):
+        x = int(moments['m10']/moments['m00'])
+        y = int(moments['m01']/moments['m00'])
+        print ("x = ", x)
+        print ("y = ", y)
+        cv2.rectangle(dilation, (x, y), (x+2, y+2),(0,0,255), 2)
+    else:
+        x, y = -1, -1
+    sd.putNumber("error", x)
+    k = cv2.waitKey(20) & 0xFF
+    if k == 27:
+        break
