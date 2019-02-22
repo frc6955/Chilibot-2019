@@ -6,7 +6,7 @@ from flask_mqtt import Mqtt
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'frc6955!'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['MQTT_BROKER_URL'] = 'localhost'
+app.config['MQTT_BROKER_URL'] = '10.69.55.2'
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_USERNAME'] = ''
 app.config['MQTT_PASSWORD'] = ''
