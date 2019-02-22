@@ -46,14 +46,14 @@ public class RobotInput {
         gyro = new ADXRS450_Gyro();
         armMasterController = RobotOutput.getArmMotorReference();
 
-        frontCam = new UsbCamera("frontCam", Constantes.kCameraIndexFront);
-        frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight, Constantes.kCameraFPS);
-        backCam = new UsbCamera("backCam", Constantes.kCameraIndexBack);
-        backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight, Constantes.kCameraFPS);
-        serverLarge = CameraServer.getInstance().addServer("LargeServer", 1181);
-        serverSmall = CameraServer.getInstance().addServer("SmallServer", 1182);
-        serverLarge.setSource(frontCam);
-        serverSmall.setSource(backCam);
+        // frontCam = new UsbCamera("frontCam", Constantes.kCameraIndexFront);
+        // frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight, Constantes.kCameraFPS);
+        // backCam = new UsbCamera("backCam", Constantes.kCameraIndexBack);
+        // backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight, Constantes.kCameraFPS);
+        // serverLarge = CameraServer.getInstance().addServer("LargeServer", 1181);
+        // serverSmall = CameraServer.getInstance().addServer("SmallServer", 1182);
+        // serverLarge.setSource(frontCam);
+        // serverSmall.setSource(backCam);
 
         networkTableInstance = NetworkTableInstance.getDefault();
         visionNTTable = networkTableInstance.getTable(Constantes.kVisionNTTable);

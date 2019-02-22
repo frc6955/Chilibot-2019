@@ -96,9 +96,9 @@ public class RobotOutput {
 
     public void homeArm() {
         // Home arm to upper position. The second conditional ensures a negative encoder count, because a positive one means the arm already passed by the encoder home
-        while(!armMaster.getSensorCollection().isFwdLimitSwitchClosed() && (armMaster.getSelectedSensorPosition(Constantes.kTalonConfigPIDLoopIdx) <= 0)) {
-            armMaster.set(ControlMode.PercentOutput, Constantes.kArmHomingSpeed);
-        }
+        // while(!armMaster.getSensorCollection().isFwdLimitSwitchClosed() && (armMaster.getSelectedSensorPosition(Constantes.kTalonConfigPIDLoopIdx) <= 0)) {
+        //     armMaster.set(ControlMode.PercentOutput, Constantes.kArmHomingSpeed);
+        // }
         armMaster.setSelectedSensorPosition(Constantes.kArmHome, Constantes.kTalonConfigPIDLoopIdx, Constantes.kTalonConfigTimeoutMs);
     }
 

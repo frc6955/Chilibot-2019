@@ -1,0 +1,123 @@
+!!com.snobot.simulator.config.v1.SimulatorConfigV1
+mAccelerometers: []
+mAnalogIn:
+- mHandle: 0
+  mName: Analog In 0
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiAnalogInWrapper
+mAnalogOut: []
+mDefaultI2CWrappers: {}
+mDefaultSpiWrappers:
+  0: ADXRS450
+mDigitalIO: []
+mEncoders:
+- mConnectedSpeedControllerHandle: 112
+  mHandle: 112
+  mName: CAN Encoder (12)
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim$CtreEncoder
+mGyros:
+- mHandle: 100
+  mName: ADXRS450 Gyro
+  mType: com.snobot.simulator.simulator_components.adx_family.ADXRS450GyroWrapper
+mPwm:
+- mHandle: 0
+  mMotorModelConfig:
+    mGearReduction: 0.095238
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 2
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
+    mConversionFactor: 1.0
+    mLoad: 40.8
+  mName: Speed Controller 0
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
+- mHandle: 1
+  mMotorModelConfig:
+    mGearReduction: 0.095238
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: true
+    mMotorType: CIM
+    mNumMotors: 2
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
+    mConversionFactor: 1.0
+    mLoad: 40.8
+  mName: Speed Controller 1
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
+- mHandle: 109
+  mMotorModelConfig:
+    mGearReduction: 0.117647
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: false
+    mMotorType: 775 Pro
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
+    mConversionFactor: 1.0
+    mLoad: 1.0
+  mName: CTRE SC 9
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 110
+  mMotorModelConfig:
+    mGearReduction: 0.117647
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: false
+    mMotorType: 775 Pro
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
+    mConversionFactor: 1.0
+    mLoad: 1.0
+  mName: CTRE SC 10
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 111
+  mMotorModelConfig:
+    mGearReduction: 9.62E-4
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: false
+    mMotorType: 775 Pro
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: CTRE SC 11
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 112
+  mMotorModelConfig:
+    mGearReduction: 9.62E-4
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: false
+    mMotorType: 775 Pro
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: CTRE SC 12
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+mRelays: []
+mSimulatorComponents:
+- !!com.snobot.simulator.simulator_components.config.TankDriveConfig
+  mGyroHandle: 100
+  mLeftMotorHandle: 0
+  mRightMotorHandle: 1
+  mTurnKp: 1.0
+mSolenoids:
+- mHandle: 16
+  mName: Solenoid 16
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiSolenoidWrapper
+- mHandle: 17
+  mName: Solenoid 17
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiSolenoidWrapper
+- mHandle: 18
+  mName: Solenoid 18
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiSolenoidWrapper
+- mHandle: 19
+  mName: Solenoid 19
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiSolenoidWrapper
