@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
         mqttLogger.addValue(()->(entradas.getGyroAngle()), "webui/sensors/gyro", MQTTTransmitRate.FAST);
         mqttLogger.addValue(()->(entradas.getAllCurrents()), "webui/pdp/all", MQTTTransmitRate.FAST);
         mqttLogger.addValue(()->(entradas.getArmAngle()), "webui/sensors/arm", MQTTTransmitRate.FAST);
-        mqttLogger.addValue(()->(entradas.getUltrasonicAdquisition()), "webui/sensors/ball", MQTTTransmitRate.SLOW);
+        mqttLogger.addValue(()->(entradas.getBallAdquisition()), "webui/sensors/ball", MQTTTransmitRate.SLOW);
     }
 
     public void initializationRobotRoutine() {

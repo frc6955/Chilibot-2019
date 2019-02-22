@@ -35,7 +35,7 @@ public class Chassis implements SubSystemInterface {
 
         if(entradas.getSecondaryJoyButtonOnPress(Constantes.kJoystickButtonX)) {
             displayForwardCamera = !displayForwardCamera;
-            // entradas.switchCameras();
+            entradas.switchCameras(displayForwardCamera);
         }  
     }
 

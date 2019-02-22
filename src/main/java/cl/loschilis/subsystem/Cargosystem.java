@@ -3,8 +3,6 @@ package cl.loschilis.subsystem;
 import cl.loschilis.io.RobotInput;
 import cl.loschilis.io.RobotOutput;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import cl.loschilis.Constantes;
 
 
@@ -12,11 +10,17 @@ public class CargoSystem implements SubSystemInterface {
 
     private static CargoSystem instance;
 
+    private boolean armSetpointSet;
+
     public static CargoSystem getInstance() {
         if (instance == null) {
             instance = new CargoSystem();
         }
         return instance;
+    }
+
+    private CargoSystem() {
+        this.armSetpointSet = false;
     }
 
     @Override
@@ -26,29 +30,42 @@ public class CargoSystem implements SubSystemInterface {
         } else if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonRB)) {
             salidas.setIntakeMotor(Constantes.kSpeedIntakeIn);
         } else {
-            if (entradas.getUltrasonicAdquisition()) {
+            if (entradas.getBallAdquisition()) {
                 salidas.setIntakeMotor(Constantes.kSpeedIntakeHold);
             } else {
                 salidas.setIntakeMotor(Constantes.kSpeedIntakeStop);
             }
         }
-        if (entradas.getSecondaryJoyPOVAngle() == -1) {
+        double operatorPOVAngle = entradas.getSecondaryJoyPOVAngle();
+        if (operatorPOVAngle == -1) {
+            /**
+             * If no setpoints modifications are requested, allow manual control.
+             * If manual control is requested, deactivate setpoint protection.
+             * Else, if no setpoint is set, allow stopping of motors. If a setpoint is set, stopping is not allowed.
+             */ 
             if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonA)) {
+                this.armSetpointSet = false;
                 salidas.setArmSpeed(Constantes.kSpeedArmDown);
             } else if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonY)) {
+                this.armSetpointSet = false;
                 salidas.setArmSpeed(Constantes.kSpeedArmUp);
             } else {
-                salidas.setArmSpeed(Constantes.kSpeedArmStop);
+                if (!this.armSetpointSet) {
+                    salidas.setArmSpeed(Constantes.kSpeedArmStop);
+                }
             }
         } else {
-            // Protect setpoint setting with a flag
-            if (entradas.getSecondaryJoyPOVAngle() == 0) {
+            /**
+             * If a setpoint modification is requested, enable setpoint protection and set setpoint.
+             */
+            this.armSetpointSet = true;
+            if (operatorPOVAngle == 0) {
                 salidas.setArmPosition(Constantes.kArmHardStop);
-            } else if (entradas.getSecondaryJoyPOVAngle() == 45) {
-                salidas.setArmPosition((Constantes.kArmRocket + Constantes.kArmHardStop) / 2);
-            } else if (entradas.getSecondaryJoyPOVAngle() == 90) {
-                salidas.setArmPosition(Constantes.kArmRocket);
-            } else if (entradas.getSecondaryJoyPOVAngle() == 180) {
+            } else if (operatorPOVAngle == 45) {
+                salidas.setArmPosition(Constantes.kArmCargoFront);
+            } else if (operatorPOVAngle == 90) {
+                salidas.setArmPosition(Constantes.kArmRocketLevelOne);
+            } else if (operatorPOVAngle == 180) {
                 salidas.setArmPosition(Constantes.kArmFloor);
             }
         }

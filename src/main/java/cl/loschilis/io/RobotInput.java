@@ -4,11 +4,6 @@ import cl.loschilis.Constantes;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.json.JSONObject;
 
-import edu.wpi.cscore.MjpegServer;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode;
-import edu.wpi.cscore.VideoSource;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -23,8 +18,6 @@ public class RobotInput {
     private Joystick driver;
     private Joystick operator;
     private PowerDistributionPanel powerDistPanel;
-    // private UsbCamera frontCam, backCam;
-    // private MjpegServer serverLarge, serverSmall;
     private NetworkTableInstance networkTableInstance; 
     private NetworkTable visionNTTable;
     private AnalogInput ultraSonicAnalog;
@@ -45,15 +38,6 @@ public class RobotInput {
         ultraSonicAnalog = new AnalogInput(Constantes.kAnalogMaxbotixBallDetectorPin);
         gyro = new ADXRS450_Gyro();
         armMasterController = RobotOutput.getArmMotorReference();
-
-        // frontCam = new UsbCamera("frontCam", Constantes.kCameraIndexFront);
-        // frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight, Constantes.kCameraFPS);
-        // backCam = new UsbCamera("backCam", Constantes.kCameraIndexBack);
-        // backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight, Constantes.kCameraFPS);
-        // serverLarge = CameraServer.getInstance().addServer("LargeServer", 1181);
-        // serverSmall = CameraServer.getInstance().addServer("SmallServer", 1182);
-        // serverLarge.setSource(frontCam);
-        // serverSmall.setSource(backCam);
 
         networkTableInstance = NetworkTableInstance.getDefault();
         visionNTTable = networkTableInstance.getTable(Constantes.kVisionNTTable);
@@ -95,7 +79,7 @@ public class RobotInput {
         return ultraSonicAnalog.getAverageVoltage() / Constantes.kAnalogMaxbotixVoltsPerCentimeter;
     }
 
-    public boolean getUltrasonicAdquisition() {
+    public boolean getBallAdquisition() {
         return this.getUltrasonicSensorCm() < Constantes.kAnalogMaxbotixMinimumThreshold;
     }
 
@@ -133,28 +117,11 @@ public class RobotInput {
         return -1 * (90.0 / 600.0) * armMasterController.getSelectedSensorPosition(Constantes.kTalonConfigPIDLoopIdx);
     }
 
-    // public void switchCameras() {
-    //     VideoSource tempCamLarge = serverLarge.getSource();
-    //     VideoSource tempCamSmall = serverSmall.getSource();
-
-    //     tempCamLarge.setResolution(Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight);
-    //     tempCamSmall.setResolution(Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight);
-
-    //     serverLarge.setSource(tempCamSmall);
-    //     serverSmall.setSource(tempCamLarge);
-    // }
-
-    // public UsbCamera getUsbCamera(int cam) {
-    //     if(cam == Constantes.kCameraIndexFront) {
-    //         return frontCam;
-    //     } else if(cam == Constantes.kCameraIndexBack) {
-    //         return backCam;
-    //     } else {
-    //         throw new IllegalArgumentException("Incorrect camera index!");
-    //     }
-    // }
-
     public double getVisionError() {
-        return visionNTTable.getEntry("error").getDouble(Constantes.kVisionNoLockState);
+        return visionNTTable.getEntry(Constantes.kNTEntryVisionError).getDouble(Constantes.kVisionNoLockState);
     }
+
+	public void switchCameras(boolean flipCams) {
+        visionNTTable.getEntry(Constantes.kNTEntryFlippedCams).setBoolean(flipCams);
+	}
 }

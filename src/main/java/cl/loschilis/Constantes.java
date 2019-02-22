@@ -70,11 +70,14 @@ public class Constantes {
     public static final long fastMQTTRefreshRate = 50;
     public static final long slowMQTTRefreshRate = 250;
     public static final String brokerHostUrl = "tcp://localhost:1883";
+    // Networktable Entries
+    public static final String kNTEntryVisionError = "error";
+    public static final String kNTEntryFlippedCams = "flippedCams";
     // Vision configurations
-    public static final double KCenter = 160;
-    public static final double KRotateR = 0.2;
-    public static final double KRotateL = -0.2;
-    public static final double KO = 0;
+    public static final double kCenter = 160;
+    public static final double kRotateR = 0.2;
+    public static final double kRotateL = -0.2;
+    public static final double kO = 0;
 	public static final double kVisionAlignKp = -1 / (Constantes.kCameraLargeWidth / 2);
     public static final String kVisionNTTable = "vision";
     public static final double kVisionNoLockState = -255;
@@ -95,8 +98,9 @@ public class Constantes {
     public static final int kTalonConfigMotionAcceleration = 140;
     // PID Setpoints
     public static final int kArmHome = 0;
-    public static final int kArmHardStop = -3;
-    public static final int kArmRocket = -450;
+    public static final int kArmHardStop = -5;
+    public static final int kArmCargoFront = -200;
+    public static final int kArmRocketLevelOne = -450;
     public static final int kArmFloor = -675;
     public static final double kArmHomingSpeed = 0.15;
     // LED Driver

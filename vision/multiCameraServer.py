@@ -168,70 +168,55 @@ if __name__ == "__main__":
         ntinst.startClientTeam(team)
 
     # start cameras
-    cameras = []
-    # for cameraConfig in cameraConfigs:
-    #     cameras.append(startCamera(cameraConfig))
-    # camTargets = cameras[0]
     camera = cv2.VideoCapture(0)
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
     camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-    # mpjpegServer = MjpegServer("CameraBack", "", 1181)
-
     # User code
     sd = ntinst.getTable("vision")
     sd.putBoolean("connected", True)
-while(True):
-     # Capture frame
-    _, frame = camera.read()
 
-    # Apply gaussian blur with 5x5 kernel
+    while(True):
+        # Capture frame
+        _, frame = camera.read()
 
-    blur = cv2.GaussianBlur(frame,(5,5),0)
-    # Conver to HSV and gray
-    
-    hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
-    Thold = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
-    
-    # Segmentation
-    lower_green = np.array([49, 0, 100], dtype=np.uint8)
-    upper_green = np.array([59, 150, 255], dtype=np.uint8)
-    mask = cv2.inRange(hsv,lower_green, upper_green)
-    res = cv2.bitwise_and(blur,blur, mask= mask)
-    # Morphology to eliminate islands   
-    
-    kernel = np.ones((11,11),np.float32)/225
-    opening = cv2.morphologyEx(res, cv2.MORPH_OPEN, kernel)
-    erosion = cv2.erode(opening,kernel,iterations = 1)
-    dilation = cv2.dilate(erosion,kernel,iterations = 1)
-    # Threshold operation
-    
-    ret,thresh = cv2.threshold(mask, 40, 255, 0)
-    #Contours
-    
-    contours,hierachy=cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    if len(contours) != 0:
-        # draw in blue the contours that were founded
-        cv2.drawContours(dilation, contours, -1, 255, 3)
-
-        #find the biggest area
-        c = max(contours, key = cv2.contourArea)
-
-        x,y,w,h = cv2.boundingRect(c)
-        # draw the book contour (in green)
-        cv2.rectangle(dilation,(x,y),(x+w,y+h),(0,255,0),2)
-    # Calculate moments
-    
-    moments = cv2.moments(c)
-    area = moments['m00']
-    if(area > 200):
-        x = int(moments['m10']/moments['m00'])
-        y = int(moments['m01']/moments['m00'])
-        print ("x = ", x)
-        print ("y = ", y)
-        cv2.rectangle(dilation, (x, y), (x+2, y+2),(0,0,255), 2)
-    else:
-        x, y = -1, -1
-    sd.putNumber("error", x)
-    k = cv2.waitKey(20) & 0xFF
-    if k == 27:
-        break
+        # Apply gaussian blur with 5x5 kernel
+        blur = cv2.GaussianBlur(frame,(5,5),0)
+        # Convert to HSV and gray
+        hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
+        Thold = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
+        # Segmentation
+        lower_green = np.array([49, 0, 100], dtype=np.uint8)
+        upper_green = np.array([59, 150, 255], dtype=np.uint8)
+        mask = cv2.inRange(hsv,lower_green, upper_green)
+        res = cv2.bitwise_and(blur,blur, mask= mask)
+        # Morphology to eliminate islands   
+        kernel = np.ones((11,11),np.float32)/225
+        opening = cv2.morphologyEx(res, cv2.MORPH_OPEN, kernel)
+        erosion = cv2.erode(opening,kernel,iterations = 1)
+        dilation = cv2.dilate(erosion,kernel,iterations = 1)
+        # Threshold operation
+        ret,thresh = cv2.threshold(mask, 40, 255, 0)
+        #Contours
+        contours,hierachy=cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        if len(contours) != 0:
+            # draw in blue the contours that were founded
+            cv2.drawContours(dilation, contours, -1, 255, 3)
+            #find the biggest area
+            c = max(contours, key = cv2.contourArea)
+            x,y,w,h = cv2.boundingRect(c)
+            # draw the book contour (in green)
+            cv2.rectangle(dilation,(x,y),(x+w,y+h),(0,255,0),2)
+        # Calculate moments
+        moments = cv2.moments(c)
+        area = moments['m00']
+        if(area > 200):
+            x = int(moments['m10']/moments['m00'])
+            y = int(moments['m01']/moments['m00'])
+            print ("x = ", x)
+            print ("y = ", y)
+        else:
+            x, y = -1, -1
+        sd.putNumber("error", x)
+        k = cv2.waitKey(20) & 0xFF
+        if k == 27:
+            break
