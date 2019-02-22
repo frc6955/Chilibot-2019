@@ -27,3 +27,6 @@ update-rc.d mosquitto.init.sh defaults
 ldconfig
 
 echo "[mosquitto] Finished"
+
+reboot 
+echo "Rebooting"

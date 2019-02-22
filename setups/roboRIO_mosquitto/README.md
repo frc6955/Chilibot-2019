@@ -1,1 +1,1 @@
-Run `./install.osx.sh <ROBORIO_IP> <ROBORIO_SSH_PORT>` after making executable to install Mosquitto broker on roboRIO. `mosquitto.roborio.conf` contains configurations for mosquitto broker.
+Run `./install.osx.sh <ROBORIO_IP> <ROBORIO_SSH_PORT>` after making executable (`chmod +x install.osx.sh`) to install Mosquitto broker on roboRIO. `mosquitto.roborio.conf` contains configurations for mosquitto broker.
