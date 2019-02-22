@@ -1,9 +1,11 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2019.1.1"
+    id "edu.wpi.first.GradleRIO" version "2019.3.2"
+    id "cpp"
+    id "idea"
 }
 
-def ROBOT_MAIN_CLASS = "frc.robot.Main"
+def ROBOT_MAIN_CLASS = "cl.loschilis.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
@@ -12,17 +14,38 @@ deploy {
         roboRIO("roborio") {
             team = frc.getTeamNumber()
         }
-        // target('rPiVision') {
-        //     directory = '/home/pi'
-        //     failOnMissing = false
-        //     locations {
-        //         ssh {
-        //             address = 'chilivision.local'
-        //             user = 'pi'
-        //             password = 'raspberry'
-        //         }
-        //     }
-        // }
+        target('rPiVision') {
+            directory = '/home/pi'
+            failOnMissing = false
+            locations {
+                ssh {
+                    address = 'chilivision1.local'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+                ssh {
+                    address = '10.69.55.21'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+            }
+        }
+        target('WebUI') {
+            directory = '/home/pi'
+            failOnMissing = false
+            locations {
+                ssh {
+                    address = 'chilivision.local'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+                ssh {
+                    address = '10.69.55.20'
+                    user = 'pi'
+                    password = 'raspberry'
+                }
+            }
+        }
     }
     artifacts {
         frcJavaArtifact('frcJava') {
@@ -38,26 +61,40 @@ deploy {
             targets << "roborio"
             directory = '/home/lvuser/deploy'
         }
-        // // Artifact to deploy vision files to rPi
-        // fileTreeArtifact('rPiCodeDeploy') {
-        //     files = fileTree(dir: 'vision')
-        //     targets << "rPiVision"
-        //     directory = '/home/pi/code'
-        // }
+        // Artifact to deploy vision files to rPi
+        fileCollectionArtifact('rPiCodeDeploy') {
+            files = fileTree(dir: 'vision')
+            targets << "rPiVision"
+            directory = '/home/pi'
+            predeploy << {
+                execute('sudo mount -o remount,rw /')
+            }
+            postdeploy << {
+                execute('sudo chmod 755 ~/multiCameraServer.py')
+                execute('sudo mount -o remount,ro /')
+            }
+        }
+
+        // Artifact to deploy WebUI files to rPi
+        fileTreeArtifact('WebUICodeDeploy') {
+            files = fileTree(dir: 'web')
+            targets << 'WebUI'
+            directory = '/home/pi/webui'
+
+            predeploy << {
+                execute('sudo mount -o remount,rw /')
+                execute('sudo systemctl stop chiliwebui') 
+            }
+
+            postdeploy << {
+                execute('sudo cp $(pwd)/webui/resources/chiliwebui.service /etc/systemd/system/chiliwebui.service')
+                execute('sudo systemctl daemon-reload; sudo service chiliwebui restart; sudo service chiliwebui status')
+                execute('sudo systemctl enable chiliwebui')
+                execute('sudo mount -o remount,ro /')
+            }
+        }
     }
 }
-
-// model {
-//     components {
-//         chiliVision(NativeExecutableSpec) {
-
-//             targetPlatform wpi.platforms.raspbian
-
-
-//             useLibrary(it)
-//         }
-//     }
-// }
 
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
@@ -70,6 +107,9 @@ repositories {
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
+    // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
+    compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.1.0'
+    compile group: 'org.json', name: 'json', version: '20180813'
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
@@ -82,5 +122,7 @@ dependencies {
 // knows where to look for our Robot Class.
 jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    // Necessary to allow use of MQTT library
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }

@@ -1,0 +1,63 @@
+body {
+	background-color: #273674;
+	margin: 0;
+	padding: 0;
+	width: 100vw;
+}
+
+#clockdiv{
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+	display: inline-block;
+	font-weight: 100;
+	text-align: center;
+	font-size: 45px;
+}
+
+#clockdiv > div{
+	padding: 5px;
+	border-radius: 3px;
+	background: white;
+	display: inline-block; 
+} 
+
+#clockdiv div > span{
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	border-radius: 2px; 
+	background: #273674;
+	display: inline-block; 
+}
+
+.smalltext{
+	padding-top: 2px;
+	font-size: 15px; 
+ }
+
+#logo{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 40%;
+}
+
+#marginLogo{
+	padding-bottom: 1%;
+	height: auto;
+}
+
+#connection_state {
+    color: red;
+}
+
+#driverCam {
+	border-style: solid;
+	border-width: 10px;
+	border-color: white;
+}
+
+#gyroRobot {
+	margin-top: 25px;
+}
