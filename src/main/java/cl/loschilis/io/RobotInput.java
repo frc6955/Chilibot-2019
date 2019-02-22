@@ -83,6 +83,10 @@ public class RobotInput {
         return driver.getPOV(0);
     }
 
+    public double getSecondaryJoyPOVAngle() {
+        return operator.getPOV(0);
+    }
+
     public double getChannelCurrent(int canal) {
         return powerDistPanel.getCurrent(canal);
     }

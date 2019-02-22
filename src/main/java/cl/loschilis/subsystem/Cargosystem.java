@@ -32,7 +32,7 @@ public class CargoSystem implements SubSystemInterface {
                 salidas.setIntakeMotor(Constantes.kSpeedIntakeStop);
             }
         }
-        if (entradas.getPrimaryJoyPOVAngle() == -1) {
+        if (entradas.getSecondaryJoyPOVAngle() == -1) {
             if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonA)) {
                 salidas.setArmSpeed(Constantes.kSpeedArmDown);
             } else if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonY)) {
@@ -42,11 +42,13 @@ public class CargoSystem implements SubSystemInterface {
             }
         } else {
             // Protect setpoint setting with a flag
-            if (entradas.getPrimaryJoyPOVAngle() == 0) {
+            if (entradas.getSecondaryJoyPOVAngle() == 0) {
                 salidas.setArmPosition(Constantes.kArmHardStop);
-            } else if (entradas.getPrimaryJoyPOVAngle() == 90) {
+            } else if (entradas.getSecondaryJoyPOVAngle() == 45) {
+                salidas.setArmPosition((Constantes.kArmRocket + Constantes.kArmHardStop) / 2);
+            } else if (entradas.getSecondaryJoyPOVAngle() == 90) {
                 salidas.setArmPosition(Constantes.kArmRocket);
-            } else if (entradas.getPrimaryJoyPOVAngle() == 180) {
+            } else if (entradas.getSecondaryJoyPOVAngle() == 180) {
                 salidas.setArmPosition(Constantes.kArmFloor);
             }
         }
