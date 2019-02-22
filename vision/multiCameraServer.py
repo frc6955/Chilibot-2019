@@ -173,13 +173,14 @@ if __name__ == "__main__":
     #     cameras.append(startCamera(cameraConfig))
     # camTargets = cameras[0]
     camera = cv2.VideoCapture(0)
-    camera.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 320)
-    camera.set(cv2.CV_CAP_PROP_FRAME_HEIGHT, 240)
+    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+    camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
     # mpjpegServer = MjpegServer("CameraBack", "", 1181)
 
     # User code
     sd = ntinst.getTable("vision")
-    while(True):
+    sd.putBoolean("connected", True)
+while(True):
      # Capture frame
     _, frame = camera.read()
 

@@ -23,8 +23,8 @@ public class RobotInput {
     private Joystick driver;
     private Joystick operator;
     private PowerDistributionPanel powerDistPanel;
-    private UsbCamera frontCam, backCam;
-    private MjpegServer serverLarge, serverSmall;
+    // private UsbCamera frontCam, backCam;
+    // private MjpegServer serverLarge, serverSmall;
     private NetworkTableInstance networkTableInstance; 
     private NetworkTable visionNTTable;
     private AnalogInput ultraSonicAnalog;
@@ -46,14 +46,14 @@ public class RobotInput {
         gyro = new ADXRS450_Gyro();
         armMasterController = RobotOutput.getArmMotorReference();
 
-        frontCam = new UsbCamera("frontCam", Constantes.kCameraIndexFront);
-        frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight, Constantes.kCameraFPS);
-        backCam = new UsbCamera("backCam", Constantes.kCameraIndexBack);
-        backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight, Constantes.kCameraFPS);
-        serverLarge = CameraServer.getInstance().addServer("LargeServer", 1181);
-        serverSmall = CameraServer.getInstance().addServer("SmallServer", 1182);
-        serverLarge.setSource(frontCam);
-        serverSmall.setSource(backCam);
+        // frontCam = new UsbCamera("frontCam", Constantes.kCameraIndexFront);
+        // frontCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight, Constantes.kCameraFPS);
+        // backCam = new UsbCamera("backCam", Constantes.kCameraIndexBack);
+        // backCam.setVideoMode(VideoMode.PixelFormat.kMJPEG, Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight, Constantes.kCameraFPS);
+        // serverLarge = CameraServer.getInstance().addServer("LargeServer", 1181);
+        // serverSmall = CameraServer.getInstance().addServer("SmallServer", 1182);
+        // serverLarge.setSource(frontCam);
+        // serverSmall.setSource(backCam);
 
         networkTableInstance = NetworkTableInstance.getDefault();
         visionNTTable = networkTableInstance.getTable(Constantes.kVisionNTTable);
@@ -133,26 +133,26 @@ public class RobotInput {
         return -1 * (90.0 / 600.0) * armMasterController.getSelectedSensorPosition(Constantes.kTalonConfigPIDLoopIdx);
     }
 
-    public void switchCameras() {
-        VideoSource tempCamLarge = serverLarge.getSource();
-        VideoSource tempCamSmall = serverSmall.getSource();
+    // public void switchCameras() {
+    //     VideoSource tempCamLarge = serverLarge.getSource();
+    //     VideoSource tempCamSmall = serverSmall.getSource();
 
-        tempCamLarge.setResolution(Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight);
-        tempCamSmall.setResolution(Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight);
+    //     tempCamLarge.setResolution(Constantes.kCameraSmallWidth, Constantes.kCameraSmallHeight);
+    //     tempCamSmall.setResolution(Constantes.kCameraLargeWidth, Constantes.kCameraLargeHeight);
 
-        serverLarge.setSource(tempCamSmall);
-        serverSmall.setSource(tempCamLarge);
-    }
+    //     serverLarge.setSource(tempCamSmall);
+    //     serverSmall.setSource(tempCamLarge);
+    // }
 
-    public UsbCamera getUsbCamera(int cam) {
-        if(cam == Constantes.kCameraIndexFront) {
-            return frontCam;
-        } else if(cam == Constantes.kCameraIndexBack) {
-            return backCam;
-        } else {
-            throw new IllegalArgumentException("Incorrect camera index!");
-        }
-    }
+    // public UsbCamera getUsbCamera(int cam) {
+    //     if(cam == Constantes.kCameraIndexFront) {
+    //         return frontCam;
+    //     } else if(cam == Constantes.kCameraIndexBack) {
+    //         return backCam;
+    //     } else {
+    //         throw new IllegalArgumentException("Incorrect camera index!");
+    //     }
+    // }
 
     public double getVisionError() {
         return visionNTTable.getEntry("error").getDouble(Constantes.kVisionNoLockState);
