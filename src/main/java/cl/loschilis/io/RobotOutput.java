@@ -128,7 +128,8 @@ public class RobotOutput {
 
     public static TalonSRX getArmMotorReference() {
         if (instance == null) {
-            throw new IllegalStateException("Uninitialized outputs");
+            // throw new IllegalStateException("Uninitialized outputs");
+            instance = new RobotOutput();
         }
         return armMaster;
     }

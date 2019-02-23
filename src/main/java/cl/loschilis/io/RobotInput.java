@@ -38,7 +38,6 @@ public class RobotInput {
         ultraSonicAnalog = new AnalogInput(Constantes.kAnalogMaxbotixBallDetectorPin);
         gyro = new ADXRS450_Gyro();
         armMasterController = RobotOutput.getArmMotorReference();
-
         networkTableInstance = NetworkTableInstance.getDefault();
         visionNTTable = networkTableInstance.getTable(Constantes.kVisionNTTable);
     }
