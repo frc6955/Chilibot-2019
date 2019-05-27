@@ -4,6 +4,7 @@ import cl.loschilis.util.Scheduler;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import cl.loschilis.subsystem.Chassis;
 import cl.loschilis.subsystem.HPSystem;
 import cl.loschilis.io.RobotOutput;
@@ -22,7 +23,7 @@ public class Robot extends TimedRobot {
     private MQTTReporterManager mqttLogger;
 
     private Chassis chassis;
-    private CargoSystem Cargo;
+    private CargoSystem cargo;
     private HPSystem hatchPanelIntake;
     
     @Override
@@ -32,13 +33,13 @@ public class Robot extends TimedRobot {
         entradas = RobotInput.getInstance();
         // Subsistemas
         chassis = Chassis.getInstance();
-        Cargo = CargoSystem.getInstance();
+        cargo = CargoSystem.getInstance();
         hatchPanelIntake = HPSystem.getInstance();
         // Add subsystems to scheduler for updating
         scheduler = Scheduler.getInstance();
         scheduler.addSubsystem(chassis);
         scheduler.addSubsystem(hatchPanelIntake);
-        scheduler.addSubsystem(Cargo);
+        scheduler.addSubsystem(cargo);
         // Configure MQTTLogger reportables
         mqttLogger = MQTTReporterManager.getInstance();
         mqttLogger.addValue(()->(RobotController.getBatteryVoltage()), "webui/battery/voltage", MQTTTransmitRate.SLOW);
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot {
 
     public void initializationRobotRoutine() {
         salidas.homeArm();
+        salidas.setHPIntakeFinger(Value.kForward);
     }
 
     public void periodicRobotRoutine() {

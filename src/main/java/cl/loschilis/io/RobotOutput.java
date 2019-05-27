@@ -125,7 +125,12 @@ public class RobotOutput {
     public DifferentialDrive getRobotChassis() {
         return this.chassis;
     }
-
+    public void compressorEnable(){
+        compressor.enabled();
+    }
+    public void compressorDisable(){
+        compressor.close();
+    }
     public static TalonSRX getArmMotorReference() {
         if (instance == null) {
             // throw new IllegalStateException("Uninitialized outputs");

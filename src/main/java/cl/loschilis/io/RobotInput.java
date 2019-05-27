@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 
 public class RobotInput {
@@ -23,6 +24,7 @@ public class RobotInput {
     private AnalogInput ultraSonicAnalog;
     private ADXRS450_Gyro gyro;
     private TalonSRX armMasterController;
+    private DigitalInput bumperSwitch;
 
     public static RobotInput getInstance() {
         if (instance == null) {
@@ -40,6 +42,7 @@ public class RobotInput {
         armMasterController = RobotOutput.getArmMotorReference();
         networkTableInstance = NetworkTableInstance.getDefault();
         visionNTTable = networkTableInstance.getTable(Constantes.kVisionNTTable);
+        bumperSwitch = new DigitalInput(Constantes.kDigitalBumperSwitchPin);
     }
 
     public double getPrimaryJoyAxis(int axis) {
@@ -70,6 +73,10 @@ public class RobotInput {
         return operator.getPOV(0);
     }
 
+    public double getSecondaryJoyTriggerAxis() {
+        return (operator.getRawAxis(2) - operator.getRawAxis(3));
+    }
+
     public double getChannelCurrent(int canal) {
         return powerDistPanel.getCurrent(canal);
     }
@@ -78,8 +85,13 @@ public class RobotInput {
         return ultraSonicAnalog.getAverageVoltage() / Constantes.kAnalogMaxbotixVoltsPerCentimeter;
     }
 
+    public boolean getBumperSwitchState() {
+        return !this.bumperSwitch.get();
+    }
+
     public boolean getBallAdquisition() {
-        return this.getUltrasonicSensorCm() < Constantes.kAnalogMaxbotixMinimumThreshold;
+        // return this.getUltrasonicSensorCm() < Constantes.kAnalogMaxbotixMinimumThreshold;
+        return this.getBumperSwitchState();
     }
 
     public double armCurrent() {

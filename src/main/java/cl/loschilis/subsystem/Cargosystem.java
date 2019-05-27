@@ -37,16 +37,21 @@ public class CargoSystem implements SubSystemInterface {
             }
         }
         double operatorPOVAngle = entradas.getSecondaryJoyPOVAngle();
+
+        // double operatorPOVAngle = entradas.getPrimaryJoyPOVAngle();
         if (operatorPOVAngle == -1) {
             /**
              * If no setpoints modifications are requested, allow manual control.
              * If manual control is requested, deactivate setpoint protection.
              * Else, if no setpoint is set, allow stopping of motors. If a setpoint is set, stopping is not allowed.
              */ 
-            if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonA)) {
+            if (Math.abs(entradas.getSecondaryJoyTriggerAxis()) > 0.05) {
+                salidas.setArmSpeed(entradas.getSecondaryJoyTriggerAxis());
+            }
+            else if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonA) || entradas.getSecondaryJoyButton(Constantes.kJoystickButtonB)) {
                 this.armSetpointSet = false;
                 salidas.setArmSpeed(Constantes.kSpeedArmDown);
-            } else if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonY)) {
+            } else if (entradas.getPrimaryJoyButton(Constantes.kJoystickButtonY) || entradas.getSecondaryJoyButton(Constantes.kJoystickButtonX)) {
                 this.armSetpointSet = false;
                 salidas.setArmSpeed(Constantes.kSpeedArmUp);
             } else {
