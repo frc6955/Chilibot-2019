@@ -89,9 +89,13 @@ public class RobotInput {
         return !this.bumperSwitch.get();
     }
 
+    /**
+     *  IMPORTANT: Ball adquisition recognition is disabled for demo use
+     */
     public boolean getBallAdquisition() {
+        return true;
         // return this.getUltrasonicSensorCm() < Constantes.kAnalogMaxbotixMinimumThreshold;
-        return this.getBumperSwitchState();
+        // return this.getBumperSwitchState();
     }
 
     public double armCurrent() {

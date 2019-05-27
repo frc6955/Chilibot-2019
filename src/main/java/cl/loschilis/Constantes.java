@@ -111,4 +111,6 @@ public class Constantes {
     public static final int kLEDPWMFrontBlueChannel = 3;
     public static final int kLEDPWMRearRedChannel = 4;
     public static final int kLEDPWMRearBlueChannel = 5;
+    // Demo constants
+    public static final double kForwardDriveScaling = 0.8;
 }

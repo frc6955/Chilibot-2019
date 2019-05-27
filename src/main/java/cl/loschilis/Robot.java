@@ -51,8 +51,11 @@ public class Robot extends TimedRobot {
     }
 
     public void initializationRobotRoutine() {
-        salidas.homeArm();
-        salidas.setHPIntakeFinger(Value.kForward);
+        /**
+         *  IMPORTANT: Arm homing and initial setup control is disabled for demo use
+         */
+        // salidas.homeArm();
+        // salidas.setHPIntakeFinger(Value.kForward);
     }
 
     public void periodicRobotRoutine() {

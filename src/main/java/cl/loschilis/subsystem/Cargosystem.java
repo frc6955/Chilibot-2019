@@ -63,16 +63,19 @@ public class CargoSystem implements SubSystemInterface {
             /**
              * If a setpoint modification is requested, enable setpoint protection and set setpoint.
              */
-            this.armSetpointSet = true;
-            if (operatorPOVAngle == 0) {
-                salidas.setArmPosition(Constantes.kArmHardStop);
-            } else if (operatorPOVAngle == 45) {
-                salidas.setArmPosition(Constantes.kArmCargoFront);
-            } else if (operatorPOVAngle == 90) {
-                salidas.setArmPosition(Constantes.kArmRocketLevelOne);
-            } else if (operatorPOVAngle == 180) {
-                salidas.setArmPosition(Constantes.kArmFloor);
-            }
+            /**
+             *  IMPORTANT: PID setpoint control is disabled for demo use
+             */
+            // this.armSetpointSet = true;
+            // if (operatorPOVAngle == 0) {
+            //     salidas.setArmPosition(Constantes.kArmHardStop);
+            // } else if (operatorPOVAngle == 45) {
+            //     salidas.setArmPosition(Constantes.kArmCargoFront);
+            // } else if (operatorPOVAngle == 90) {
+            //     salidas.setArmPosition(Constantes.kArmRocketLevelOne);
+            // } else if (operatorPOVAngle == 180) {
+            //     salidas.setArmPosition(Constantes.kArmFloor);
+            // }
         }
         
     }
