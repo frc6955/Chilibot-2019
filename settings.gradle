@@ -1,6 +1,4 @@
 import org.gradle.internal.os.OperatingSystem
-import jaci.gradle.toolchains.*
-import jaci.gradle.nativedeps.*
 
 pluginManagement {
     repositories {

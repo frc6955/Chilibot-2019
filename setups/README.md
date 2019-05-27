@@ -1,1 +1,0 @@
-This folder contains scripts for setting up different components of the control system.
